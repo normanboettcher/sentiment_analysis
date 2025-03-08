@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+logs/*
 # Distribution / packaging
 .Python
 build/
@@ -169,3 +169,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+data
+embeddings

@@ -1,10 +1,10 @@
 import tensorflow_datasets as tfds
 import tensorflow as tf
-def create_train_test_val(info: tfds.core.DatasetInfo, datasets, validation_fraction=0.2):
+def create_train_test_val(info: tfds.core.DatasetInfo, datasets, validation_fraction=0.2, shuffle=10000, reshuffle=False):
     train_data, test_data = datasets["train"], datasets["test"]
     num_train = int(info.splits["train"].num_examples * (1 - validation_fraction))
 
-    shuffled_train_data = train_data.shuffle(10000, reshuffle_each_iteration=False)
+    shuffled_train_data = train_data.shuffle(shuffle, reshuffle_each_iteration=reshuffle)
     training_data = shuffled_train_data.take(num_train)
     validation_data = shuffled_train_data.skip(num_train)
     return training_data, test_data, validation_data
