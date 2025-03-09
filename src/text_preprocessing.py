@@ -26,3 +26,10 @@ class ReviewPreprocessor:
 
     def to_tensor(self, x_batch, default=b"0"):
         return x_batch.to_tensor(default_value=default)
+
+    def encode_words(self, x_batch, y_batch, table):
+        return table.lookup(x_batch), y_batch
+
+    def pad_sequences_fn(self, x_batch, y_batch, maxlen=200):
+        x_padded = tf.keras.preprocessing.sequence.pad_sequences(x_batch.numpy(), maxlen=maxlen)
+        return tf.convert_to_tensor(x_padded, dytpe=tf.int32), y_batch
