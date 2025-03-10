@@ -1,9 +1,16 @@
 import tensorflow as tf
 import nltk
 from nltk.corpus import stopwords
+from src.review_learn import LookupTableCreator
 
 
 class ReviewPreprocessor:
+
+    def __init__(self, vocab_size, num_oov_buckets, batch_size=32, maxlen=200):
+        self._vocab_size = vocab_size
+        self._num_oov_buckets = num_oov_buckets
+        self._batch_size = batch_size
+        self._maxlen = maxlen
 
     def remove_stop_words(self, x_batch):
         nltk.download('stopwords')
@@ -30,6 +37,22 @@ class ReviewPreprocessor:
     def encode_words(self, x_batch, y_batch, table):
         return table.lookup(x_batch), y_batch
 
-    def pad_sequences_fn(self, x_batch, y_batch, maxlen=200):
-        x_padded = tf.keras.preprocessing.sequence.pad_sequences(x_batch.numpy(), maxlen=maxlen)
-        return tf.convert_to_tensor(x_padded, dytpe=tf.int32), y_batch
+    def pad_sequences_fn(self, x_batch, y_batch):
+        x_padded = tf.keras.preprocessing.sequence.pad_sequences(x_batch.numpy(), maxlen=self._maxlen, padding='post')
+        return tf.convert_to_tensor(x_padded, dtype=tf.int32), y_batch
+
+    def prepare_data_set(self, data):
+        table_creator = LookupTableCreator()
+        lookup_table = table_creator.create_lookup_table(data, self._vocab_size, self._num_oov_buckets,
+                                                         self._batch_size)
+
+        dataset = data.map(lambda x, y: self.encode_words(x, y, lookup_table))
+        dataset = dataset.map(lambda x, y: tf.py_function(
+            func=self.pad_sequences_fn,
+            inp=[x, y],
+            Tout=(tf.int32, tf.int32)
+        ),
+                              num_parallel_calls=tf.data.AUTOTUNE)
+        dataset = dataset.batch(self._batch_size)
+        dataset = dataset.prefetch(tf.data.AUTOTUNE)
+        return dataset

@@ -1,5 +1,6 @@
 import tensorflow_datasets as tfds
 import tensorflow as tf
+import numpy as np
 
 
 def create_train_test_val(info: tfds.core.DatasetInfo, datasets, validation_fraction=0.2, shuffle=10000,
@@ -19,6 +20,33 @@ def get_labels(data: tf.data.Dataset):
 
 def get_text_lengths(data: tf.data.Dataset):
     return [len(text.numpy().decode('utf-8')) for text, _ in data]
+
+
+def load_glove_embeddings(filepath, word_index, vocab_size=20000, embed_size=100, num_oov_buckets=1000):
+    """
+    Lädt vortrainierte GloVe-Embeddings und erstellt eine Matrix für unser Vokabular.
+    """
+    embeddings_index = {}
+
+    # GloVe-Datei Zeile für Zeile einlesen
+    with open(filepath, encoding="utf-8") as f:
+        for line in f:
+            values = line.split()
+            word = values[0]  # Erstes Element ist das Wort
+            vector = np.asarray(values[1:], dtype='float32')  # Rest ist der Vektor
+            embeddings_index[word] = vector
+
+    # Embedding-Matrix für unser Vokabular erstellen
+    embedding_matrix = np.zeros((vocab_size + num_oov_buckets, embed_size))
+    oov_embedding = np.random.uniform(-0.1, 0.1, (num_oov_buckets, embed_size))
+    for word, i in word_index.items():
+        if i < vocab_size:
+            embedding_vector = embeddings_index.get(word)
+            if embedding_vector is not None:
+                embedding_matrix[i] = embedding_vector  # Falls das Wort existiert, Vektor speichern
+        elif i < vocab_size + num_oov_buckets:
+            embedding_matrix[i] = oov_embedding[i - vocab_size]
+    return embedding_matrix
 
 
 from collections import Counter
