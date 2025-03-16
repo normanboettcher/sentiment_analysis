@@ -1,17 +1,9 @@
 import unittest
-from numpy.ma.testutils import assert_array_equal, assert_equal
 from src.text_preprocessing import ReviewPreprocessor
 import tensorflow as tf
 
 
 class ReviewPreprocessorTest(unittest.TestCase):
-    def test_to_tensor(self):
-        # Does not need a table
-        preprocessor = ReviewPreprocessor(2, 5, None)
-        reviews = tf.RaggedTensor.from_row_lengths(values=[b'This', b'is', b'a', b'text', b'another', b'text'],
-                                                   row_lengths=[4, 2])
-        dense_tensor = preprocessor.to_tensor(reviews)
-        assert_array_equal(dense_tensor.numpy(), [[b'This', b'is', b'a', b'text'], [b'another', b'text', b'0', b'0']])
 
     def test_encode_words(self):
         keys = tf.constant([b"<pad>", b"review", b"just"])

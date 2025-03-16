@@ -2,8 +2,11 @@ import unittest
 
 from numpy.ma.testutils import assert_array_equal, assert_equal
 
-from src.review_learn import LookupTableCreator
 import tensorflow as tf
+
+from src.lookup_table_creator import LookupTableCreator
+
+
 class LookupTableCreatorTest(unittest.TestCase):
 
     @classmethod

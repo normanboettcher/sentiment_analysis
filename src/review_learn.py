@@ -1,12 +1,14 @@
-import tensorflow_datasets as tfds
 import tensorflow as tf
 import numpy as np
 
+import nltk
+from nltk.corpus import stopwords
 
-def create_train_test_val(info: tfds.core.DatasetInfo, datasets, validation_fraction=0.2, shuffle=10000,
-                          reshuffle=False):
+
+def create_train_test_val(datasets, validation_fraction=0.2, shuffle=10000,
+                          reshuffle=False, num_samples=25000):
     train_data, test_data = datasets["train"], datasets["test"]
-    num_train = int(info.splits["train"].num_examples * (1 - validation_fraction))
+    num_train = int(num_samples * (1 - validation_fraction))
 
     shuffled_train_data = train_data.shuffle(shuffle, reshuffle_each_iteration=reshuffle)
     training_data = shuffled_train_data.take(num_train)
@@ -49,31 +51,43 @@ def load_glove_embeddings(filepath, word_index, vocab_size=20000, embed_size=100
     return embedding_matrix
 
 
-from collections import Counter
+from tensorflow.keras.regularizers import l2
 
 
-class LookupTableCreator:
+def build_model(n_hidden=2, embed_size=128, vocab_size=10000, num_oov_buckets=1000, dropout_rate=0.3,
+                embedding_matrix=None):
+    model = tf.keras.models.Sequential()
 
-    def __init__(self):
-        self._counter = None
-        self._tabel = None
+    model.add(tf.keras.layers.Embedding(input_dim=vocab_size + num_oov_buckets, output_dim=embed_size,
+                                        weights=[embedding_matrix], trainable=False))
+    # 1D Convolutional Layer (Extrahiert lokale Merkmale)
+    model.add(tf.keras.layers.Conv1D(filters=128, kernel_size=5, activation="relu", padding="same"))
+    model.add(tf.keras.layers.BatchNormalization())
+    model.add(tf.keras.layers.MaxPooling1D(pool_size=2))
+    for hidden in range(n_hidden):
+        model.add(
+            tf.keras.layers.Bidirectional(tf.keras.layers.GRU(128, return_sequences=True, dropout=dropout_rate)))
+    model.add(tf.keras.layers.Bidirectional(tf.keras.layers.GRU(64)))
+    model.add(tf.keras.layers.Dropout(dropout_rate))
+    model.add(tf.keras.layers.Dense(64, activation="relu", kernel_regularizer=l2(0.001)))
+    model.add(tf.keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                  metrics=["accuracy"])
+    return model
 
-    def assign_vocabs_to_counter(self, data: tf.data.Dataset, batch_size=32):
-        self._counter = Counter()
-        for X_batch, y_batch in data.batch(batch_size):
-            for review in X_batch.numpy():
-                self._counter.update(review.tolist())
 
-    def get_counter(self):
-        return self._counter
+def preprocess(x_batch, y_batch, replace_characters=b"[^a-zA-Z0-9.,?!']", maxlen=200):
+    x_batch = tf.strings.lower(x_batch)
+    # replace <br /> with spaces
+    x_batch = tf.strings.regex_replace(x_batch, b"<br\\s*/?>", b" ")
+    # replace any characters other than letters with spaces
+    x_batch = tf.strings.regex_replace(x_batch, replace_characters, b" ")
+    x_batch = tf.strings.split(x_batch)
+    x_batch = x_batch[:, :maxlen]
+    return x_batch.to_tensor(default_value=b""), y_batch
 
-    def prepare_truncated_vocabs(self, vocab_size, vocabs):
-        return [word for word, _ in vocabs[:vocab_size]]
 
-    def create_lookup_table(self, data, vocab_size, num_oov_buckets, batch_size=32):
-        self.assign_vocabs_to_counter(data, batch_size)
-        trunc_vocabs = self.prepare_truncated_vocabs(vocab_size, self._counter.most_common())
-        words = tf.constant(trunc_vocabs)
-        word_ids = tf.range(len(trunc_vocabs), dtype=tf.int64)
-        vocab_init = tf.lookup.KeyValueTensorInitializer(words, word_ids)
-        return tf.lookup.StaticVocabularyTable(vocab_init, num_oov_buckets)
+def remove_stop_words(x_batch):
+    nltk.download('stopwords')
+    stop_words = set(stopwords.words('english'))
+    return tf.ragged.boolean_mask(x_batch, ~tf.reduce_any(x_batch[..., None] == list(stop_words), axis=-1))
