@@ -2,9 +2,8 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from review_learn import get_text_lengths
+from src.review_learn import get_text_lengths, get_labels
 import numpy as np
-from review_learn import get_labels
 
 
 def print_stats_of_texts(data):
@@ -36,7 +35,7 @@ class TextStatisticUtils:
         self._draw_subplots([get_labels(self._train_set), get_labels(self._test_set), get_labels(self._val_set)],
                             ["Distribution of text lengths (Training Data)", "Distribution of text lengths (Test Data)",
                              "Distribution of text lengths (Validation Data)"],
-                            sns.histplot)
+                            sns.histplot, has_bins=True)
 
     def print_test_text_stats(self):
         return print_text_stats(self._test_set, 'Test')
@@ -56,12 +55,16 @@ class TextStatisticUtils:
                              ("Validation", get_labels(self._val_set))]:
             print(f"Class distribution in {name} dataset: {np.bincount(labels)}")
 
-    def _draw_subplots(self, data_list, titles, plot_func, bins=30, kde=True):
+    def _draw_subplots(self, data_list, titles, plot_func, bins=30, kde=True, has_bins=False):
         fig, axes = plt.subplots(1, len(data_list), figsize=(15,5))
-
-        for i, (data, title) in enumerate(zip(data_list, titles)):
-            plot_func(data, bins=bins, kde=kde, ax=axes[i])
-            axes[i].set_title(title)
+        if has_bins:
+            for i, (data, title) in enumerate(zip(data_list, titles)):
+                plot_func(data, bins=bins, kde=kde, ax=axes[i])
+                axes[i].set_title(title)
+        else:
+            for i, (data, title) in enumerate(zip(data_list, titles)):
+                plot_func(data, kde=kde, ax=axes[i])
+                axes[i].set_title(title)
 
         plt.tight_layout()
         plt.show()
