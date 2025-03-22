@@ -22,9 +22,9 @@ class ReviewPreprocessor:
         x_padded = tf.pad(x_batch, padding, constant_values=0)
         return x_padded, y_batch
 
-    def prepare_data_set(self, data):
+    def prepare_data_set(self, data, use_words=True):
         dataset = data.batch(self._batch_size)
-        dataset = dataset.map(lambda x,y: preprocess(x,y, maxlen=self._maxlen))
+        dataset = dataset.map(lambda x,y: preprocess(x,y, maxlen=self._maxlen, use_words=use_words))
         dataset = dataset.map(self.encode_words)
         dataset = dataset.map(self.pad_sequences_fn)
         dataset = dataset.prefetch(tf.data.AUTOTUNE)
