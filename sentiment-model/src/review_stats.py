@@ -7,7 +7,6 @@ import numpy as np
 
 
 def print_stats_of_texts(data):
-
     return f"""
     | Average text length: {np.mean(data)} 
     | Median text length: {np.median(data)}
@@ -15,8 +14,9 @@ def print_stats_of_texts(data):
     | Maximum text length: {np.max(data)}
      """
 
+
 def print_text_stats(dataset, dataset_name):
-    text_lengths= get_text_lengths(dataset)
+    text_lengths = get_text_lengths(dataset)
     print(f"Statistics of {dataset_name} Data: {print_stats_of_texts(text_lengths)}")
 
 
@@ -28,19 +28,22 @@ class TextStatisticUtils:
 
     def draw_class_dists(self):
         self._draw_subplots([get_labels(self._train_set), get_labels(self._test_set), get_labels(self._val_set)],
-                            ["Training data class distribution", "Test data class distribution", "Validation data class distribution"],
-                            sns.countplot)
+                            ["Training data class distribution", "Test data class distribution",
+                             "Validation data class distribution"],
+                            sns.countplot, kde=False, bins=None)
 
     def draw_text_length_dist(self):
         self._draw_subplots([get_labels(self._train_set), get_labels(self._test_set), get_labels(self._val_set)],
                             ["Distribution of text lengths (Training Data)", "Distribution of text lengths (Test Data)",
                              "Distribution of text lengths (Validation Data)"],
-                            sns.histplot, has_bins=True)
+                            sns.histplot, kde=True, bins=30)
 
     def print_test_text_stats(self):
         return print_text_stats(self._test_set, 'Test')
+
     def print_train_text_stats(self):
         return print_text_stats(self._train_set, 'Train')
+
     def print_val_text_stats(self):
         return print_text_stats(self._val_set, 'Validation')
 
@@ -55,20 +58,16 @@ class TextStatisticUtils:
                              ("Validation", get_labels(self._val_set))]:
             print(f"Class distribution in {name} dataset: {np.bincount(labels)}")
 
-    def _draw_subplots(self, data_list, titles, plot_func, bins=30, kde=True, has_bins=False):
-        fig, axes = plt.subplots(1, len(data_list), figsize=(15,5))
-        if has_bins:
+    def _draw_subplots(self, data_list, titles, plot_func, bins=None, kde=True):
+        fig, axes = plt.subplots(1, len(data_list), figsize=(15, 5))
+        if bins is not None and kde:
             for i, (data, title) in enumerate(zip(data_list, titles)):
                 plot_func(data, bins=bins, kde=kde, ax=axes[i])
                 axes[i].set_title(title)
         else:
             for i, (data, title) in enumerate(zip(data_list, titles)):
-                plot_func(data, kde=kde, ax=axes[i])
+                plot_func(data, ax=axes[i])
                 axes[i].set_title(title)
 
         plt.tight_layout()
         plt.show()
-
-
-
-

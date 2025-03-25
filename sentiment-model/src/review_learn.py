@@ -63,7 +63,7 @@ def preprocess(x_batch, y_batch, replace_characters=b"[^a-zA-Z0-9.,?!']", maxlen
     x_batch = tf.strings.regex_replace(x_batch, replace_characters, b" ")
     x_batch = tf.strings.split(x_batch)
     x_batch = x_batch[:, :maxlen]
-    return x_batch.to_tensor(default_value=b""), y_batch
+    return x_batch.to_tensor(default_value=b"0"), y_batch
 
 
 def remove_stop_words(x_batch):
