@@ -4,7 +4,7 @@ from numpy.ma.testutils import assert_array_equal, assert_equal
 
 import tensorflow as tf
 
-from src.lookup_table_creator import LookupTableCreator
+from sentiment_model.lookup_table_creator import LookupTableCreator
 
 
 class LookupTableCreatorTest(unittest.TestCase):

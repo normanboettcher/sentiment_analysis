@@ -1,5 +1,5 @@
 import unittest
-from src.text_preprocessing import ReviewPreprocessor
+from sentiment_model.text_preprocessing import ReviewPreprocessor
 import tensorflow as tf
 
 

@@ -1,0 +1,6 @@
+tensorflow
+tensorflow_datasets
+matplotlib
+seaborn
+nltk
+numpy

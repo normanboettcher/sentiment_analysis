@@ -1,5 +1,5 @@
 from collections import Counter
-from src.review_learn import preprocess
+from review_learn import preprocess
 import tensorflow as tf
 
 

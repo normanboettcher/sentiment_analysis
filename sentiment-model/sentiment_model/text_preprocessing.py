@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from src.review_learn import preprocess
+from review_learn import preprocess
 
 
 class ReviewPreprocessor:
@@ -24,7 +24,7 @@ class ReviewPreprocessor:
 
     def prepare_data_set(self, data, use_words=True):
         dataset = data.batch(self._batch_size)
-        dataset = dataset.map(lambda x,y: preprocess(x,y, maxlen=self._maxlen, use_words=use_words))
+        dataset = dataset.map(lambda x, y: preprocess(x, y, maxlen=self._maxlen, use_words=use_words))
         dataset = dataset.map(self.encode_words)
         dataset = dataset.map(self.pad_sequences_fn)
         dataset = dataset.prefetch(tf.data.AUTOTUNE)
