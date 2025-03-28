@@ -2,7 +2,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from review_learn import get_text_lengths, get_labels
+from sentiment_model.review_learn import get_text_lengths, get_labels
 import numpy as np
 
 

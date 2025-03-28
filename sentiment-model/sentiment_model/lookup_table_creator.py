@@ -1,5 +1,5 @@
 from collections import Counter
-from review_learn import preprocess
+from sentiment_model.review_learn import preprocess
 import tensorflow as tf
 
 
