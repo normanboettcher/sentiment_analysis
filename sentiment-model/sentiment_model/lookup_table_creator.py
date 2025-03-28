@@ -16,6 +16,19 @@ class LookupTableCreator:
             for review in X_batch.numpy():
                 self._counter.update(review.tolist())
 
+    def read_from_path(self, path):
+        import json
+        # load lookup table from json
+        with open(path, 'r') as file:
+            loaded_dict = json.load(file)
+        # make string keys to byte strings\n
+        lookup_dict_bytes = {key.encode('utf-8'): value for key, value in loaded_dict.items()}
+        vocabs = tf.constant(list(lookup_dict_bytes.keys()))
+        self._word_ids = tf.constant(list(lookup_dict_bytes.values()), dtype=tf.int64)
+        self._words = tf.lookup.KeyValueTensorInitializer(vocabs, self._word_ids)
+        table = tf.lookup.StaticVocabularyTable(self._words, num_oov_buckets=1000)
+        return table
+
     def get_counter(self):
         return self._counter
 

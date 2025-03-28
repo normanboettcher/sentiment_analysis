@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from review_learn import preprocess
+from sentiment_model.review_learn import preprocess
 
 
 class ReviewPreprocessor:
