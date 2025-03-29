@@ -1,4 +1,3 @@
-from attr.filters import exclude
 from setuptools import setup
 from setuptools.config.expand import find_packages
 
