@@ -56,7 +56,6 @@ def preprocess(x_batch, y_batch, replace_characters=b"[^a-zA-Z0-9.,?!']", maxlen
     if use_words is False:
         x_batch = tf.strings.substr(x_batch, 0, maxlen)
 
-
     # replace <br /> with spaces
     x_batch = tf.strings.regex_replace(x_batch, b"<br\\s*/?>", b" ")
     # replace any characters other than letters with spaces
@@ -70,3 +69,33 @@ def remove_stop_words(x_batch):
     nltk.download('stopwords')
     stop_words = set(stopwords.words('english'))
     return tf.ragged.boolean_mask(x_batch, ~tf.reduce_any(x_batch[..., None] == list(stop_words), axis=-1))
+
+
+# Attention Layer Definition
+from keras.saving import register_keras_serializable
+
+
+@register_keras_serializable(package="CustomLayers")
+class Attention(tf.keras.layers.Layer):
+    def __init__(self, name=None, **kwargs):
+        super(Attention, self).__init__(name=name, **kwargs)
+
+    def call(self, inputs):
+        # Energie-Werte berechnen (Dot-Produkt der Inputs mit sich selbst)
+        score = tf.matmul(inputs, inputs, transpose_b=True)
+
+        # Softmax über die Scores zur Normalisierung
+        attention_weights = tf.nn.softmax(score, axis=-1)
+
+        # Kontextvektor als gewichtete Summe der Eingaben
+        context_vector = tf.matmul(attention_weights, inputs)
+
+        return context_vector
+
+    def get_config(self):
+        config = super().get_config()  # Hole die Basiskonfiguration
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
