@@ -5,6 +5,7 @@ LOOKUP_TABLE_PATH = os.getenv('LOOKUP_TABLE_PATH')
 VOCAB_SIZE = os.getenv('MODEL_VOCAB_SIZE')
 NUM_OOV_BUCKETS = os.getenv('MODEL_NUM_OOV_BUCKETS')
 
+
 def env_var_not_set(var):
     return f"Environmentvariable {var} is not set!"
 
@@ -18,7 +19,6 @@ if NUM_OOV_BUCKETS is None:
     raise RuntimeError(env_var_not_set('MODEL_NUM_OOV_BUCKETS'))
 else:
     print(f"Set MODEL_NUM_OOV_BUCKETS to {NUM_OOV_BUCKETS}")
-
 
 if LOOKUP_TABLE_PATH is None:
     raise RuntimeError(env_var_not_set('LOOKUP_TABLE_PATH'))
