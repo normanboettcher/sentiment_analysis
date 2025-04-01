@@ -1,6 +1,7 @@
 black
 flake8
 pytest
+nltk
 ../sentiment-model
 flask
 tensorflow==2.19.0
