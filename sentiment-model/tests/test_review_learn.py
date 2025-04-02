@@ -12,7 +12,7 @@ class LookupTableCreatorTest(unittest.TestCase):
     @classmethod
     def setUp(cls):
         cls._creator = LookupTableCreator()
-        cls._sentences = [[b"hello", b"world", b"like", b"you", b"<pad>"], [b"hello", b"darling", b"<pad>", b"<pad>", b"<pad>"]]
+        cls._sentences = [b"hello world like you", b"hello darling"]
         cls._labels = [0, 1]
 
     def test_assign_vocabs(self):
@@ -20,7 +20,7 @@ class LookupTableCreatorTest(unittest.TestCase):
 
         self._creator.assign_vocabs_to_counter(dataset)
         result = self._creator.get_counter().most_common()
-        assert_array_equal(result[:2], [(b"<pad>", 4), (b"hello", 2)])
+        assert_array_equal(result[:2], [(b"hello", 2), (b"0", 2)])
         # 6 different words
         assert_equal(len(result), 6)
 
@@ -31,12 +31,12 @@ class LookupTableCreatorTest(unittest.TestCase):
         assert_equal(len(trunc_vocabs), 2)
 
     def test_create_lookup_table(self):
-        data =  tf.data.Dataset.from_tensor_slices((self._sentences, self._labels))
+        data = tf.data.Dataset.from_tensor_slices((self._sentences, self._labels))
         table = self._creator.create_lookup_table(data, 2, 3)
-        sentence = tf.constant([b"hello", b"hat", b"are", b"you", b"<pad>", b"<pad>"])
+        sentence = tf.constant([b"hello", b"hat", b"are", b"you", b"0", b"0"])
         lookup = table.lookup(sentence)
         print(f"most_common: {self._creator.get_counter().most_common()}")
-        assert_array_equal(lookup, [1, 2, 4, 3, 0, 0])
+        assert_array_equal(lookup, [0, 2, 4, 3, 1, 1])
 
 
 if __name__ == '__main__':

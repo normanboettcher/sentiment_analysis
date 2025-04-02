@@ -31,16 +31,16 @@ class PipelineIntegrationTests(unittest.TestCase):
         train_data, test_data, validation_data = preprocessor.prepare_data_set(
             train_set), preprocessor.prepare_data_set(test_set), preprocessor.prepare_data_set(val_set)
 
-        embeddings = load_glove_embeddings('../embeddings/glove.6B.100d.txt', tf.keras.datasets.imdb.get_word_index(),
-                                           vocab_size=vocab_size, embed_size=100, num_oov_buckets=num_oov_buckets)
+        # embeddings = load_glove_embeddings('../embeddings/glove.6B.100d.txt', tf.keras.datasets.imdb.get_word_index(),
+        #                                   vocab_size=vocab_size, embed_size=100, num_oov_buckets=num_oov_buckets)
         for x_batch, y_batch in train_data.take(1):
             print(f"x_shape: {x_batch.shape}")
             print(f"y_shape {y_batch.shape}")
         # create the model and run it for 3 epochs
-        #model = build_model(n_hidden=1, vocab_size=vocab_size, num_oov_buckets=num_oov_buckets,
+        # model = build_model(n_hidden=1, vocab_size=vocab_size, num_oov_buckets=num_oov_buckets,
         #                    embedding_matrix=embeddings, embed_size=100)
-        #history = model.fit(train_data, validation_data=validation_data, epochs=3)
-        #self.assertIn("accuracy", history.history)
+        # history = model.fit(train_data, validation_data=validation_data, epochs=3)
+        # self.assertIn("accuracy", history.history)
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ from charset_normalizer.md import getLogger
 from sentiment_model.review_learn import preprocess
 import tensorflow as tf
 
-logger = getLogger('LookupTableCreator')
+logger = getLogger("LookupTableCreator")
 
 
 class LookupTableCreator:
@@ -22,21 +22,28 @@ class LookupTableCreator:
 
     def read_from_path(self, path):
         import json
+
         # load lookup table from json
         try:
-            with open(path, 'r') as file:
+            with open(path, "r") as file:
                 loaded_dict = json.load(file)
             # make string keys to byte strings\n
-            lookup_dict_bytes = {key.encode('utf-8'): value for key, value in loaded_dict.items()}
+            lookup_dict_bytes = {
+                key.encode("utf-8"): value for key, value in loaded_dict.items()
+            }
             vocabs = tf.constant(list(lookup_dict_bytes.keys()))
-            self._word_ids = tf.constant(list(lookup_dict_bytes.values()), dtype=tf.int64)
+            self._word_ids = tf.constant(
+                list(lookup_dict_bytes.values()), dtype=tf.int64
+            )
             self._words = tf.lookup.KeyValueTensorInitializer(vocabs, self._word_ids)
             return tf.lookup.StaticVocabularyTable(self._words, num_oov_buckets=1000)
         except Exception as e:
             logger.exception(
-                'Error encountered while reading lookup_table from json file with path: %s and Error: %s',
-                path, e)
-            raise RuntimeError(f'Error reading lookup table as json: {e}') from e
+                "Error encountered while reading lookup_table from json file with path: %s and Error: %s",
+                path,
+                e,
+            )
+            raise RuntimeError(f"Error reading lookup table as json: {e}") from e
 
     def get_counter(self):
         return self._counter
@@ -52,7 +59,9 @@ class LookupTableCreator:
 
     def create_lookup_table(self, data, vocab_size, num_oov_buckets, batch_size=32):
         self.assign_vocabs_to_counter(data, batch_size)
-        trunc_vocabs = self.prepare_truncated_vocabs(vocab_size, self._counter.most_common())
+        trunc_vocabs = self.prepare_truncated_vocabs(
+            vocab_size, self._counter.most_common()
+        )
         self._words = tf.constant(trunc_vocabs)
         self._word_ids = tf.range(len(trunc_vocabs), dtype=tf.int64)
         vocab_init = tf.lookup.KeyValueTensorInitializer(self._words, self._word_ids)
