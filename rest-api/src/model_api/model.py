@@ -43,7 +43,8 @@ class SentimentModel:
             dummy_y = [10]
             review = tf.data.Dataset.from_tensor_slices(([review], dummy_y))
             encoded_review = preprocessor.prepare_data_set(review)
-            sentiment = self._model.predict(encoded_review)[0]
+            prediction = self._model.predict(encoded_review)[0]
+            sentiment = self.get_sentiment_from_prediction(prediction)
             return {"sentiment": sentiment}
         except RuntimeError as e:
             return {"error": str(e)}
@@ -61,3 +62,8 @@ class SentimentModel:
                 f"An error occurred reading LookupTable from {table_path}."
             )
             raise RuntimeError(f"Error reading lookup table: {e}")
+
+    def get_sentiment_from_prediction(self, proba):
+        if proba >= 0.5:
+            return 'positive'
+        return 'negative'
