@@ -4,25 +4,26 @@ import tensorflow as tf
 from sentiment_model.lookup_table_creator import LookupTableCreator
 from sentiment_model.text_preprocessing import ReviewPreprocessor
 
-import model_api.config as config
 from sentiment_model.review_learn import Attention
 
 logger = getLogger("SentimentModel")
 
 
 class SentimentModel:
-    def __init__(self):
-        self._config = config.load_config()
+    def __init__(self, model_path, vocab_size, lookup_table_path, num_oov_buckets):
+        self._model_path = model_path
+        self._vocab_size = vocab_size
+        self._lookup_table_path = lookup_table_path
+        self._num_oov_buckets = num_oov_buckets
         self._model = self._load_model()
 
     def _load_model(self):
-        model_path = self._config["MODEL_PATH"]
         try:
             return tf.keras.models.load_model(
-                model_path, custom_objects={"Attention": Attention}
+                self._model_path, custom_objects={"Attention": Attention}
             )
         except FileNotFoundError:
-            raise Exception(f"Model not found at {model_path}")
+            raise Exception(f"Model not found at {self._model_path}")
 
     def get_model(self):
         return self._model
@@ -36,8 +37,8 @@ class SentimentModel:
             lookup_table = self._get_lookup_table()
             preprocessor = ReviewPreprocessor(
                 lookup_table=lookup_table,
-                vocab_size=self._config["VOCAB_SIZE"],
-                num_oov_buckets=self._config["NUM_OOV_BUCKETS"],
+                vocab_size=self._vocab_size,
+                num_oov_buckets=self._num_oov_buckets,
             )
             # preprocess logic needs dummy y, because funcitons are designed for inputs like x_batch, y_batch
             dummy_y = [10]
@@ -53,7 +54,7 @@ class SentimentModel:
             return {"error": "An unexpected error occurred. Please try again later."}
 
     def _get_lookup_table(self):
-        table_path = self._config["LOOKUP_TABLE_PATH"]
+        table_path = self._lookup_table_path
         try:
             table_creator = LookupTableCreator()
             return table_creator.read_from_path(table_path)
