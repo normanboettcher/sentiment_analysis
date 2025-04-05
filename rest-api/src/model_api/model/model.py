@@ -1,7 +1,6 @@
 from logging import getLogger
 
 import tensorflow as tf
-from sentiment_model.lookup_table_creator import LookupTableCreator
 from sentiment_model.text_preprocessing import ReviewPreprocessor
 
 from sentiment_model.review_learn import Attention
@@ -10,12 +9,10 @@ logger = getLogger("SentimentModel")
 
 
 class SentimentModel:
-    def __init__(self, model_path, vocab_size, lookup_table_path, num_oov_buckets):
+    def __init__(self, model_path, preprocessor: ReviewPreprocessor):
         self._model_path = model_path
-        self._vocab_size = vocab_size
-        self._lookup_table_path = lookup_table_path
-        self._num_oov_buckets = num_oov_buckets
         self._model = self._load_model()
+        self._preprocessor = preprocessor
 
     def _load_model(self):
         try:
@@ -32,37 +29,17 @@ class SentimentModel:
         if not review:
             logger.error("Empty review detected. Returning with error.")
             return {"error": "Review text is empty."}
-
         try:
-            lookup_table = self._get_lookup_table()
-            preprocessor = ReviewPreprocessor(
-                lookup_table=lookup_table,
-                vocab_size=self._vocab_size,
-                num_oov_buckets=self._num_oov_buckets,
-            )
             # preprocess logic needs dummy y, because funcitons are designed for inputs like x_batch, y_batch
             dummy_y = [10]
             review = tf.data.Dataset.from_tensor_slices(([review], dummy_y))
-            encoded_review = preprocessor.prepare_data_set(review)
+            encoded_review = self._preprocessor.prepare_data_set(review)
             prediction = self._model.predict(encoded_review)[0]
             sentiment = self.get_sentiment_from_prediction(prediction)
             return {"sentiment": sentiment}
-        except RuntimeError as e:
-            return {"error": str(e)}
         except Exception:
             logger.exception("Prediction failed due to an unexpected error.")
             return {"error": "An unexpected error occurred. Please try again later."}
-
-    def _get_lookup_table(self):
-        table_path = self._lookup_table_path
-        try:
-            table_creator = LookupTableCreator()
-            return table_creator.read_from_path(table_path)
-        except Exception as e:
-            logger.exception(
-                f"An error occurred reading LookupTable from {table_path}."
-            )
-            raise RuntimeError(f"Error reading lookup table: {e}")
 
     def get_sentiment_from_prediction(self, proba):
         if proba >= 0.5:
