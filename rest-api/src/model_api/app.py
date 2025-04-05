@@ -1,6 +1,7 @@
 from flask import Flask
+
+from model_api.config.config import load_config
 from model_api.routes.review_prediction import predict_bp
-from model_api.config import load_config
 
 
 def create_app(config_name=None):
