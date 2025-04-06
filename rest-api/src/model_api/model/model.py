@@ -37,11 +37,11 @@ class SentimentModel:
             prediction = self._model.predict(encoded_review)[0]
             sentiment = self.get_sentiment_from_prediction(prediction)
             return {"sentiment": sentiment}
-        except Exception:
-            logger.exception("Prediction failed due to an unexpected error.")
+        except Exception as e:
+            logger.exception(f"Prediction failed due to an unexpected error: {e}.")
             return {"error": "An unexpected error occurred. Please try again later."}
 
     def get_sentiment_from_prediction(self, proba):
         if proba >= 0.5:
-            return 'positive'
-        return 'negative'
+            return "positive"
+        return "negative"
