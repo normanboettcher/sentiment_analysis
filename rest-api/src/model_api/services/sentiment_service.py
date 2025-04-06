@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from flask import current_app, Config
+from flask import Config
 from sentiment_model.lookup_table_creator import LookupTableCreator
 from sentiment_model.text_preprocessing import ReviewPreprocessor
 from tensorflow.python.ops.lookup_ops import StaticVocabularyTable

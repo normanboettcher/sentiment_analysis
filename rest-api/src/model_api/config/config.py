@@ -6,3 +6,6 @@ def load_config(name=None):
     if name == 'Test':
         from model_api.config.test_config import TestConfig
         return TestConfig
+    if name == 'Dev':
+        from model_api.config.dev_config import DevConfig
+        return DevConfig

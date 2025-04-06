@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, current_app
-from flask.sansio.blueprints import Blueprint
+from flask import request, jsonify, current_app
+from flask import Blueprint
 
 from model_api.services.sentiment_service import get_sentiment
 
