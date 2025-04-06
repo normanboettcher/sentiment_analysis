@@ -17,7 +17,8 @@ def get_sentiment(review: str, config: Config) -> dict:
         preprocessor = create_review_preprocessor(lookup_table, vocab_size, num_oov_buckets)
     except RuntimeError as e:
         logger.exception(f'A RuntimeError occurred creating lookup_table and ReviewPreprocessor: {e}')
-        raise Exception(e)
+        return {
+            "error": "An error occurred reading the lookup_table or environment variables from config! Please message your service provider."}
     except Exception as e:
         logger.exception(f'An unexpected Error occurred: {e}')
         return {"error": "An unexpected error occurred. Please try again later."}
