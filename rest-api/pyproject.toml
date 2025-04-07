@@ -1,10 +1,43 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+[tool.tox]
+envlist = ["py312", "lint", "format", "coverage"]
+
+[tool.tox.env.py312]
+description = "Run tests with Python 3.12"
+deps = [
+    "pytest",
+    "pytest-cov",
+    "-rrequirements.txt"
+]
+commands = [
+    ["pytest", "--cov=model_api", "--cov-report=term-missing", "tests/"]
+]
+
+[tool.tox.env.lint]
+description = "Run flake8 linter"
+deps = ["flake8"]
+commands = [
+    ["flake8", "src/"]
+]
+
+[tool.tox.env.format]
+description = "Run black formatter"
+deps = ["black"]
+commands = [
+    ["black", "src/"],
+]
+
+[tool.tox.env.coverage]
+description = "Run tests and generate HTML coverage report"
+deps = [
+    "pytest",
+    "pytest-cov",
+    "-rrequirements.txt"
+]
+commands = [
+    ["pytest", "--cov=model_api", "--cov-report=html", "tests/"]
+]
 
 [project]
 name = "sentiment_model_api"
 version = "1.0"
 
-[tool.setuptools]
-packages = { find = { where = ["src"] } }
