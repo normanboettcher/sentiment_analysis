@@ -24,7 +24,8 @@ def get_sentiment(review: str, config: Config) -> dict:
             f"A RuntimeError occurred creating lookup_table and ReviewPreprocessor: {e}"
         )
         return {
-            "error": "An error occurred reading the lookup_table or environment variables from config! Please message your service provider."
+            "error": "An error occurred reading the lookup_table or environment variables from config!"
+            " Please message your service provider."
         }
     except Exception as e:
         logger.exception(f"An unexpected Error occurred: {e}")

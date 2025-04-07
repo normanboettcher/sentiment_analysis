@@ -1,14 +1,12 @@
 import unittest
 
 from flask import current_app
-
-from model_api.app import create_app
-from model_api.config.test_config import TestConfig
+from .test_resources.test_config import create_test_app, TestConfig
 
 
 class AppTestCase(unittest.TestCase):
     def test_app_config(self):
-        app = create_app(config_name='Test')
+        app = create_test_app()
         with app.app_context():
             config = current_app.config
             self.assertIsNotNone(config)
