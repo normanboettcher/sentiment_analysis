@@ -8,11 +8,11 @@ import numpy as np
 
 def print_stats_of_texts(data):
     return f"""
-    | Average text length: {np.mean(data)} 
-    | Median text length: {np.median(data)}
-    | Minimum text length: {np.min(data)}
-    | Maximum text length: {np.max(data)}
-     """
+       | Average text length: {np.mean(data)}
+       | Median text length: {np.median(data)}
+       | Minimum text length: {np.min(data)}
+       | Maximum text length: {np.max(data)}
+       """
 
 
 def print_text_stats(dataset, dataset_name):
@@ -22,10 +22,10 @@ def print_text_stats(dataset, dataset_name):
 
 class TextStatisticUtils:
     def __init__(
-        self,
-        train_set: tf.data.Dataset,
-        test_set: tf.data.Dataset,
-        val_set: tf.data.Dataset,
+            self,
+            train_set: tf.data.Dataset,
+            test_set: tf.data.Dataset,
+            val_set: tf.data.Dataset,
     ):
         self._train_set = train_set
         self._test_set = test_set

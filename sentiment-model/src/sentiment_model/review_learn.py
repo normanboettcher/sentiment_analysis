@@ -1,4 +1,7 @@
 import tensorflow as tf
+
+# Attention Layer Definition
+from keras.saving import register_keras_serializable
 import numpy as np
 
 import nltk
@@ -84,10 +87,6 @@ def remove_stop_words(x_batch):
     return tf.ragged.boolean_mask(
         x_batch, ~tf.reduce_any(x_batch[..., None] == list(stop_words), axis=-1)
     )
-
-
-# Attention Layer Definition
-from keras.saving import register_keras_serializable
 
 
 @register_keras_serializable(package="CustomLayers")
