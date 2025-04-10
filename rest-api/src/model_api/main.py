@@ -1,4 +1,8 @@
+from logging import getLogger
+
 from model_api.app import create_app
+import sys
 
 if __name__ == "__main__":
-    create_app().run(Debug=True)
+    config_name = sys.argv[1]
+    create_app(config_name=config_name).run(debug=True)
