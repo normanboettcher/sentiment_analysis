@@ -1,0 +1,9 @@
+*/.tox
+__pycache__
+*/htmlcov
+*/.coverage
+.venv/*
+.git
+.ipynb_checkpoints/*
+*.md
+.gitignore

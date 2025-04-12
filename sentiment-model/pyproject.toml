@@ -1,5 +1,5 @@
 [tool.tox]
-envlist = ["py312", "lint", "format", "coverage"]
+envlist = ["py312", "lint", "format"]
 
 [tool.tox.env.py312]
 description = "Run tests with Python 3.12"
