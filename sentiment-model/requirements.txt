@@ -1,7 +1,4 @@
-tensorflow==2.19.0
-keras==3.9.1
 tensorflow_datasets
 matplotlib
 seaborn
-nltk
 numpy

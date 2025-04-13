@@ -14,3 +14,8 @@ sentiment-model/models
 sentiment-model/logs
 sentiment-model/embeddings
 sentiment-model/data
+*.pyc
+*.pyo
+*/egg-info
+UNKNOWN.egg-info
+*/__pycache__/
