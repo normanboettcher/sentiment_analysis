@@ -35,7 +35,6 @@ RUN python -m pip install --no-cache-dir .
 
 RUN rm -rf ../sentiment-model
 WORKDIR /app
-RUN ls -l -a
 RUN ls -laR
 WORKDIR /app/rest-api/src/model_api
 #expose port
