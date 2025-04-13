@@ -7,3 +7,10 @@ __pycache__
 .ipynb_checkpoints/*
 *.md
 .gitignore
+.tox
+*/.venv/
+*/build
+sentiment-model/models
+sentiment-model/logs
+sentiment-model/embeddings
+sentiment-model/data
