@@ -43,7 +43,7 @@ class SentimentModel:
 
     def get_sentiment_from_prediction(self, proba):
         if proba >= 0.5:
-            logger.debug(f'returning positive sentiment for probability: [{proba}]')
+            logger.debug(f"returning positive sentiment for probability: [{proba}]")
             return "positive"
-        logger.debug(f'returning negative sentiment for probability: [{proba}]')
+        logger.debug(f"returning negative sentiment for probability: [{proba}]")
         return "negative"

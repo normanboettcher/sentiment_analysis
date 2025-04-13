@@ -16,6 +16,6 @@ def predict():
 
     config = current_app.config
     result = get_sentiment(review, config)
-    if result.get('error') is not None:
+    if result.get("error") is not None:
         return jsonify(result), 400
     return jsonify(result)

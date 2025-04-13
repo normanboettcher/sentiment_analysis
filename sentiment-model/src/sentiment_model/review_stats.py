@@ -22,10 +22,10 @@ def print_text_stats(dataset, dataset_name):
 
 class TextStatisticUtils:
     def __init__(
-            self,
-            train_set: tf.data.Dataset,
-            test_set: tf.data.Dataset,
-            val_set: tf.data.Dataset,
+        self,
+        train_set: tf.data.Dataset,
+        test_set: tf.data.Dataset,
+        val_set: tf.data.Dataset,
     ):
         self._train_set = train_set
         self._test_set = test_set

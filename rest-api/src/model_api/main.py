@@ -1,5 +1,3 @@
-from logging import getLogger
-
 from model_api.app import create_app
 import sys
 
