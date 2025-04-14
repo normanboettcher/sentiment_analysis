@@ -12,14 +12,12 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python -m venv .venv
+RUN pip install --upgrade pip setuptools tox
 
-RUN . .venv/bin/activate && pip install --upgrade pip setuptools tox
-
+#copy rest of code
 COPY . /apps
 
-#run build for necessary sentiment-model package
-RUN . .venv/bin/activate && tox
+RUN tox
 
 # ---- Runtime image ----
 FROM python:3.12-slim AS runtime
@@ -30,29 +28,23 @@ COPY ./common-requirements.txt .
 
 RUN rm -rf  /app/rest-api/tests
 
-RUN python -m venv .venv
-RUN . .venv/bin/activate && \
-    pip install --no-cache-dir --upgrade pip && \
+RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r common-requirements.txt
 
 WORKDIR /app/rest-api
 
-RUN . ../.venv/bin/activate && \
-    pip install --no-cache-dir -r requirements.txt && \
+RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir ../sentiment-model && \
     pip install --no-cache-dir .
 
 RUN rm -rf build
-#set path for usage later on
-ENV PATH="/app/.venv/bin:$PATH"
 
 #sentiment-model is redundant now
 RUN rm -rf ../sentiment-model
+RUN rm pyproject.toml requirements.txt setup.cfg .coverage
 
 WORKDIR /app
 
-#debugging
-RUN ls -laR
 #workdir with source files
 WORKDIR /app/rest-api/src/model_api
 #expose port
