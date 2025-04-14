@@ -42,6 +42,7 @@ RUN . ../.venv/bin/activate && \
     pip install --no-cache-dir ../sentiment-model && \
     pip install --no-cache-dir .
 
+RUN rm -rf build
 #set path for usage later on
 ENV PATH="/app/.venv/bin:$PATH"
 
