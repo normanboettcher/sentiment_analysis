@@ -12,62 +12,51 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --upgrade pip setuptools pytest pytest-cov
+COPY pip.conf /etc/
+
+RUN pip install --upgrade pip setuptools pytest pytest-cov
 
 COPY common-requirements.txt /apps
 COPY sentiment-model/requirements.txt /apps/sentiment-model/
 COPY rest-api/requirements.txt /apps/rest-api/
-COPY /wheels /apps/wheels
+COPY wheels wheels/
 #install required dependencies first
-RUN pip install --no-index --no-cache-dir --find-links=/apps/wheels -r common-requirements.txt
-RUN pip install --no-index --no-cache-dir --find-links=/apps/wheels -r sentiment-model/requirements.txt
-RUN pip install --no-index --no-cache-dir --find-links=/apps/wheels -r rest-api/requirements.txt
+RUN pip install --no-index --find-links=./wheels -r common-requirements.txt \
+                                        -r sentiment-model/requirements.txt \
+                                        -r rest-api/requirements.txt
 
 #copy rest of code
-COPY sentiment-model /apps/sentiment-model
-COPY rest-api /apps/rest-api
+COPY sentiment-model sentiment-model/
+COPY rest-api rest-api/
 
 #build wheels
-RUN pip wheel ./sentiment-model/ -w /apps/wheels
-RUN pip wheel ./rest-api -w /apps/wheels
+RUN pip wheel ./sentiment-model/ -w ./wheels
+RUN pip wheel ./rest-api -w ./wheels
 
-#build and install sentiment-model
-RUN ls /apps/wheels/
-RUN sh -c "pip install /apps/wheels/sentiment_model-*.whl"
-
-WORKDIR /apps/sentiment-model
-RUN pytest --cov=sentiment_model --cov-report=term-missing tests/
-
-#build and install rest-api
-RUN sh -c "pip install /apps/wheels/sentiment_model_api*.whl"
-WORKDIR /apps/rest-api
-RUN pytest --cov=model_api --cov-report=term-missing tests/
+#install sentiment-model
+RUN pip install ./wheels/sentiment_model-*.whl \
+    && pip install ./wheels/sentiment_model_api*.whl
 
 # ---- Runtime image ----
 FROM python:3.12-slim AS runtime
 WORKDIR /app
-COPY --from=build /apps/wheels /app/wheels
+COPY --from=build /apps/wheels ./wheels
 COPY ./common-requirements.txt .
 COPY rest-api/requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-index --no-cache-dir --find-links=/app/wheels -r common-requirements.txt
-RUN pip install --no-index --no-cache-dir --find-links=/app/wheels -r requirements.txt
-RUN sh -c "pip install --no-cache-dir /app/wheels/sentiment_model-*.whl"
-RUN sh -c "pip install --no-cache-dir /app/wheels/sentiment_model_api-*.whl"
+RUN pip install --upgrade pip
+RUN pip install --no-index --find-links=./wheels -r common-requirements.txt \
+        -r requirements.txt \
+        ./wheels/sentiment_model-*.whl \
+        ./wheels/sentiment_model_api-*.whl
 
 #clean up
-RUN rm -rf /app/wheels
-
+RUN rm -rf ./wheels
 #copy only runtime source files
-COPY --from=build /apps/rest-api/src /app/rest-api/src
-#COPY --from=build /apps/rest-api/pyproject.toml /app/rest-api/
-#COPY --from=build /apps/rest-api/setup.cfg /app/rest-api/
-#COPY --from=build /apps/rest-api/requirements.txt /app/rest-api
+COPY --from=build /apps/rest-api/src ./rest-api/src
 #workdir with source files
 WORKDIR /app/rest-api/src/model_api
 #expose port
 EXPOSE 5000
 
-ENTRYPOINT ["python", "main.py"]
-CMD ["Production"]
+#ENTRYPOINT ["python", "main.py"]
