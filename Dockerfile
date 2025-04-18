@@ -12,15 +12,15 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install  --upgrade pip setuptools pytest pytest-cov flake8 black
+RUN pip install --no-cache-dir --upgrade pip setuptools pytest pytest-cov
 
 COPY common-requirements.txt /apps
 COPY sentiment-model/requirements.txt /apps/sentiment-model/
 COPY rest-api/requirements.txt /apps/rest-api/
 #install required dependencies first
-RUN pip install  -r common-requirements.txt && \
-    pip install  -r sentiment-model/requirements.txt && \
-    pip install  -r rest-api/requirements.txt
+RUN pip install --no-cache-dir -r common-requirements.txt && \
+    pip install --no-cache-dir -r sentiment-model/requirements.txt && \
+    pip install --no-cache-dir -r rest-api/requirements.txt
 
 #copy rest of code
 COPY . /apps
@@ -32,7 +32,7 @@ RUN pytest --cov=sentiment_model --cov-report=term-missing tests/
 #build and install rest-api
 WORKDIR /apps/rest-api
 
-RUN pip install  .
+RUN pip install --no-cache-dir .
 RUN pytest --cov=model_api --cov-report=term-missing tests/
 
 # ---- Runtime image ----
