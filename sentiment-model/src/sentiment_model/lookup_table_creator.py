@@ -1,6 +1,6 @@
 from collections import Counter
+from logging import getLogger
 
-from charset_normalizer.md import getLogger
 from sentiment_model.review_learn import preprocess
 import tensorflow as tf
 
