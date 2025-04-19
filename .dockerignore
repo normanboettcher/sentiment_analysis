@@ -5,12 +5,14 @@ __pycache__
 .venv/*
 .git
 **/.ipynb_checkpoints/*
+**/.ipynb
 **/*.md
 *.md
 .gitignore
 .tox
 **/.venv/
 **/build/
+**/tests
 sentiment-model/logs
 sentiment-model/embeddings
 sentiment-model/data
