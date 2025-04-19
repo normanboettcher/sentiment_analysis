@@ -15,8 +15,7 @@ commands = [
 ]
 deps = [
     "./sentiment-model",
-    "pytest",
-    "pytest-cov",
+    "-rsentiment-model/test-requirements.txt",
     "-rsentiment-model/requirements.txt",
     "-rcommon-requirements.txt"
 ]
@@ -46,8 +45,7 @@ commands = [
 ]
 deps = [
     "./rest-api",
-    "pytest",
-    "pytest-cov",
+    "-rrest-api/test-requirements.txt",
     "-rrest-api/requirements.txt",
     "-e ./sentiment-model",
     "-rcommon-requirements.txt"

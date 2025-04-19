@@ -12,8 +12,7 @@ envlist = ["py312", "lint", "format"]
 [tool.tox.env.py312]
 description = "Run tests with Python 3.12"
 deps = [
-    "pytest",
-    "pytest-cov",
+    "-rtest-requirements.txt",
     "-rrequirements.txt",
     "-e ../sentiment-model"
 ]
@@ -38,8 +37,7 @@ commands = [
 [tool.tox.env.coverage]
 description = "Run tests and generate HTML coverage report"
 deps = [
-    "pytest",
-    "pytest-cov",
+    "-rtest-requirements.txt",
     "-rrequirements.txt"
 ]
 commands = [
