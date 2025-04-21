@@ -1,6 +1,6 @@
-class RestClientConfig {
+export class RestClientConfig {
     private targetHostname: string;
-    private targetPort: string | undefined;
+    private targetPort: string;
 
     private DEFAULT_TARGET_HOSTNAME = 'localhost';
     private DEFAULT_TARGET_PORT = '5000';
@@ -13,4 +13,10 @@ class RestClientConfig {
     public getTargetHostname(){
         return this.targetHostname
     }
+
+    public getTargetPort() {
+        return this.targetPort;
+    }
 }
+
+export const useRestClientConfig = (targetHostname?: string, targetPort?: string) => new RestClientConfig(targetHostname, targetPort);
