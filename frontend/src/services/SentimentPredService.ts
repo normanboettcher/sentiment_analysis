@@ -2,16 +2,14 @@ import { SentimentResponse } from "@frontend/client/Response";
 import { ResponseValidator, useResponseValidator } from "@frontend/client/ResponseValidator";
 import { useRestClient } from "@frontend/client/RestClient";
 import { useRestClientConfig } from "@frontend/client/RestClientConfig";
+import { PredictSentimentService } from "./PredictSentimentService";
 
 export type ReviewPost = {review: string}
 
-export class SentimentPredService {
+export class SentimentPredService implements PredictSentimentService {
 
-    constructor(){}
-
-    public async getReviewSentiment(review: string): Promise<{isError: boolean, response: SentimentResponse}> {
+    public async getReviewSentiment(review: string) {
         const postRequest: ReviewPost = {review: review};
-        //use default hostname and port
         const responseValidator: ResponseValidator = useResponseValidator()
         
         try {

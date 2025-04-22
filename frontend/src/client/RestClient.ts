@@ -15,8 +15,9 @@ export class RestClient {
     }
 
     private buildUrl(service: string) {
-        const {getTargetHostname, getTargetPort} = this.clientConfig;
-        return `http://${getTargetHostname()}:${getTargetPort()}/${service}}`
+        const hostname = this.clientConfig.getTargetHostname()
+        const port = this.clientConfig.getTargetPort()
+        return `http://${hostname}:${port}/${service}`
     }
 
 }

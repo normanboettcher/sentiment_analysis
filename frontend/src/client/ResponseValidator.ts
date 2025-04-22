@@ -1,10 +1,9 @@
 import { SentimentResponse } from "./Response";
 
 export class ResponseValidator {
-    constructor(){}
 
-    public isErrorResponse(res: SentimentResponse) {
-        return 'error' in res;
+    public isErrorResponse(res: SentimentResponse): boolean{
+        return res.error !== undefined;
     }
 
 }
