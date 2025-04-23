@@ -1,5 +1,7 @@
 import os
 
+from flask import current_app
+
 
 def env_var_not_set(var):
     return f"Environmentvariable {var} is not set!"

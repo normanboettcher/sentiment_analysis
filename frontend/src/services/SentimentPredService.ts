@@ -15,8 +15,8 @@ export class SentimentPredService implements PredictSentimentService {
         try {
             const res  = await this.postReview(postRequest);
             return Promise.resolve({
-                isError: responseValidator.isErrorResponse(res),
-                response: res
+                isError: responseValidator.isErrorResponse(res.data),
+                response: {sentiment: res.data.sentiment, error: res.data.error}
             });
         } catch(e) {
             throw e;

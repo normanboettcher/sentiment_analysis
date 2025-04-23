@@ -10,7 +10,6 @@ predict_bp = Blueprint("predict", __name__)
 def predict():
     data = request.get_json()
     review = data.get("review", "")
-
     if not review:
         return jsonify({"error": "No review provided"}), 400
 

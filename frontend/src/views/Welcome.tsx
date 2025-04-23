@@ -11,6 +11,7 @@ const Welcome: React.FC = () => {
 
     const onClick = async () => {
         const response = await predService.getReviewSentiment(review ?? '');
+        console.log(`${JSON.stringify(response)}`)
         if(response.isError) {
             setError(response.response.error)
         } else {
@@ -41,7 +42,7 @@ const Welcome: React.FC = () => {
                         />
                         {(sentiment || error) &&
                             <Box sx={{flex: 1}}>
-                                <Typography>${generateReviewMessage()}</Typography>
+                                <Typography>{generateReviewMessage()}</Typography>
                             </Box>
                         }
                        <Button

@@ -2,8 +2,8 @@ export class RestClientConfig {
     private targetHostname: string;
     private targetPort: string;
 
-    private DEFAULT_TARGET_HOSTNAME = 'localhost';
-    private DEFAULT_TARGET_PORT = '5000';
+    private DEFAULT_TARGET_HOSTNAME = import.meta.env.VITE_MODEL_API_HOST ?? 'localhost';
+    private DEFAULT_TARGET_PORT = import.meta.env.VITE_MODEL_API_PORT ?? '5000';
 
     constructor(targetHostname?: string, targetPort?: string) {
         this.targetHostname = targetHostname !== undefined ? targetHostname : this.DEFAULT_TARGET_HOSTNAME;
