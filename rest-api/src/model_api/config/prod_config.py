@@ -10,20 +10,8 @@ def env_var_not_set(var):
 class ProdConfig:
     MODEL_PATH = os.getenv("M7_MODEL_PATH")
     LOOKUP_TABLE_PATH = os.getenv("LOOKUP_TABLE_PATH")
-    VOCAB_SIZE = os.getenv("MODEL_VOCAB_SIZE")
-    NUM_OOV_BUCKETS = os.getenv("MODEL_NUM_OOV_BUCKETS")
     FRONTEND_HOST_URL = os.getenv('FRONTEND_HOST_URL', 'localhost')
     FRONTEND_PORT = os.getenv('FRONTEND_PORT', '5000')
-
-    if VOCAB_SIZE is None:
-        raise RuntimeError(env_var_not_set("MODEL_VOCAB_SIZE"))
-    else:
-        print(f"Set VOCAB_SIZE to {VOCAB_SIZE}")
-
-    if NUM_OOV_BUCKETS is None:
-        raise RuntimeError(env_var_not_set("MODEL_NUM_OOV_BUCKETS"))
-    else:
-        print(f"Set MODEL_NUM_OOV_BUCKETS to {NUM_OOV_BUCKETS}")
 
     if LOOKUP_TABLE_PATH is None:
         raise RuntimeError(env_var_not_set("LOOKUP_TABLE_PATH"))
@@ -34,4 +22,3 @@ class ProdConfig:
         raise RuntimeError(env_var_not_set("MODEL_PATH"))
     else:
         print(f"Set MODEL_PATH to {MODEL_PATH}")
-

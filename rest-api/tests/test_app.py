@@ -15,8 +15,6 @@ class AppTestCase(unittest.TestCase):
             config = current_app.config
             self.assertIsNotNone(config)
             self.assertEqual(config['MODEL_PATH'], TestConfig.MODEL_PATH)
-            self.assertEqual(config['NUM_OOV_BUCKETS'], TestConfig.NUM_OOV_BUCKETS)
-            self.assertEqual(config['VOCAB_SIZE'], TestConfig.VOCAB_SIZE)
             self.assertEqual(config['LOOKUP_TABLE_PATH'], TestConfig.LOOKUP_TABLE_PATH)
             self.assertEqual(config['FRONTEND_HOST'], 'localhost')
             self.assertEqual(config['FRONTEND_PORT'], '5000')

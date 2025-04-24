@@ -7,14 +7,15 @@ from tensorflow.python.ops.lookup_ops import StaticVocabularyTable
 
 from model_api.model.model import SentimentModel
 
+
 def get_sentiment(review: str, config: Config) -> dict:
     try:
-        model_path, vocab_size, lookup_table_path, num_oov_buckets = read_env_vars(
+        model_path, lookup_table_path = read_env_vars(
             config
         )
         lookup_table = get_lookup_table(lookup_table_path)
         preprocessor = create_review_preprocessor(
-            lookup_table, vocab_size, num_oov_buckets
+            lookup_table, vocab_size=10000, num_oov_buckets=1000
         )
     except RuntimeError as e:
         current_app.logger.exception(
@@ -34,9 +35,7 @@ def get_sentiment(review: str, config: Config) -> dict:
 def read_env_vars(config: Config):
     return (
         config["MODEL_PATH"],
-        config["VOCAB_SIZE"],
         config["LOOKUP_TABLE_PATH"],
-        config["NUM_OOV_BUCKETS"],
     )
 
 
