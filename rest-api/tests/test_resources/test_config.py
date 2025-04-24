@@ -15,6 +15,8 @@ class TestConfig:
     )
     VOCAB_SIZE = "10000"
     NUM_OOV_BUCKETS = "1000"
+    FRONTEND_HOST = 'localhost'
+    FRONTEND_PORT = '5000'
 
 
 def create_test_app():
