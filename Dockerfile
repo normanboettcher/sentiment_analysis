@@ -25,10 +25,11 @@ RUN pip install -r common-requirements.txt \
 
 #copy rest of code
 COPY sentiment-model ./sentiment-model/
-COPY rest-api ./rest-api/
 #install sentiment-model
 WORKDIR /apps/sentiment-model
 RUN pip install .
+
+COPY rest-api ./rest-api/
 #install rest-api
 WORKDIR /apps/rest-api
 RUN pip install .
