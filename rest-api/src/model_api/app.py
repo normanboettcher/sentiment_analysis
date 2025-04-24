@@ -10,8 +10,10 @@ def create_app(config_name=None):
     app.logger.info(f"starting application with config profile: {config_name}")
     app.config.from_object(load_config(config_name))
 
-    host_url, target_port = app.config.get('FRONTEND_HOST_URL'), app.config.get('FRONTEND_PORT')
+    host_url, target_port = app.config.get("FRONTEND_HOST_URL"), app.config.get(
+        "FRONTEND_PORT"
+    )
 
-    CORS(app, origins=[f'http://{host_url}:{target_port}'])
+    CORS(app, origins=[f"http://{host_url}:{target_port}"])
     app.register_blueprint(predict_bp)
     return app
