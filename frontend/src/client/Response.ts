@@ -1,3 +1,3 @@
-export type SentimentResponse = {error?: string; sentiment: 'positive' | 'negative'}
+export type SentimentResponse = {error?: string; sentiment?: 'positive' | 'negative'}
 
 

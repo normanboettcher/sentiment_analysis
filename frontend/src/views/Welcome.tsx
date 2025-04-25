@@ -1,17 +1,24 @@
+import { useSentimentMessageService } from '@frontend/services/MessageService';
 import { PredictSentimentService } from '@frontend/services/PredictSentimentService';
 import { useSentimentPredService } from '@frontend/services/SentimentPredService';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Welcome: React.FC = () => {
     const predService: PredictSentimentService = useSentimentPredService();
     const [review, setReview] = useState<string | undefined>();
     const [sentiment, setSentiment] = useState<'positive' | 'negative' | undefined>();
     const [error, setError] = useState<string | undefined>();
+    const messageService = useSentimentMessageService();
+    const [infoMessage, setInfoMessage] = useState<string | undefined>();
+
+    useEffect(() => {
+        sentiment && setInfoMessage(messageService.getMessageFromSentiment(sentiment));
+    }, [sentiment])
 
     const onClick = async () => {
         const response = await predService.getReviewSentiment(review ?? '');
-        console.log(`${JSON.stringify(response)}`)
+        console.log(`${response}`)
         if(response.isError) {
             setError(response.response.error)
         } else {
@@ -19,16 +26,6 @@ const Welcome: React.FC = () => {
         }
     }
 
-    const generateReviewMessage = (): string => {
-        if (sentiment === 'negative') {
-            return 'We are sorry to hear that you did not like the movie'
-        } 
-        if (sentiment === 'positive') {
-            return 'Thank you for your positive Feedback'
-        }
-        return error  !== undefined ? error : ''
-    }
-    console.log(`review: ${review}`)
     return (
         <Box>
             <Stack direction={'row'} spacing={2} width='100%' >
@@ -40,11 +37,10 @@ const Welcome: React.FC = () => {
                             data-testid={'review-textfield'}
                             onChange={(e) => setReview(e.target.value)}
                         />
-                        {(sentiment || error) &&
                             <Box sx={{flex: 1}}>
-                                <Typography>{generateReviewMessage()}</Typography>
+                                {infoMessage && <Typography>{infoMessage}</Typography>}
+                                {error && <Typography>{error}</Typography>}
                             </Box>
-                        }
                        <Button
                             data-testid={'send-review-button'}
                             onClick={onClick}
