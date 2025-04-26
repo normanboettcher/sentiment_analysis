@@ -22,3 +22,5 @@ sentiment-model/data
 UNKNOWN.egg-info
 **/__pycache__/
 **/.pytest_cache
+Dockerfile_wheels
+rest-api/Dockerfile

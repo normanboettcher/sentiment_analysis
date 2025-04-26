@@ -1,0 +1,11 @@
+node_modules
+dist
+.gitignore
+.git
+Dockerfile
+.vscode
+.yarn
+.pnp*
+**/__tests__
+setupTests.ts
+vitest.config.ts
