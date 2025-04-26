@@ -6,6 +6,7 @@ RUN corepack enable
 COPY package.json yarn.lock ./
 RUN yarn set version 4.9.1
 #install dependencies
+ENV NODE_ENV=production
 RUN yarn install --immutable
 
 #copy the rest of the project
@@ -18,7 +19,8 @@ FROM nginx:stable-alpine
 
 #copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
-
+ENV VITE_MODEL_API_HOST='localhost'
+ENV VITE_MODEL_API_PORT='5000'
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
