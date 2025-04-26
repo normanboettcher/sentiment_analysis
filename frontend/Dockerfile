@@ -1,0 +1,24 @@
+#stage 1: build
+FROM node:20.9.0-alpine AS builder
+
+WORKDIR /app
+RUN corepack enable
+COPY package.json yarn.lock ./
+RUN yarn set version 4.9.1
+#install dependencies
+RUN yarn install --immutable
+
+#copy the rest of the project
+COPY . .
+#build project
+RUN yarn build
+
+#Stage 2: serve
+FROM nginx:stable-alpine
+
+#copy built files
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
