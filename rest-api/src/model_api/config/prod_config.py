@@ -20,3 +20,6 @@ class ProdConfig:
         raise RuntimeError(env_var_not_set("MODEL_PATH"))
     else:
         print(f"Set MODEL_PATH to {MODEL_PATH}")
+
+    print(f"set FRONTEND_HOST_URL to {FRONTEND_HOST_URL}")
+    print(f"set FRONTEND_PORT to {FRONTEND_PORT}")

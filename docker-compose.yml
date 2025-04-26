@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  predict.sentiment.com:
+    build:
+      context: frontend/
+      args:
+        VITE_MODEL_API_HOST: localhost
+        VITE_MODEL_API_PORT: "5000"
+    restart: unless-stopped
+    networks:
+      - sentiment-net
+    ports:
+      - "3000:80"
+
+  sentiment.app.api:
+    build:
+      context: .
+      dockerfile: rest-api/Dockerfile
+    restart: unless-stopped
+    networks:
+      - sentiment-net
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    environment:
+      FRONTEND_HOST_URL: localhost
+      FRONTEND_PORT: 3000
+networks:
+  sentiment-net:
+    driver: bridge
+
