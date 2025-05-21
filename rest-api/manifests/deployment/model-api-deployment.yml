@@ -6,7 +6,7 @@ metadata:
     app: model-api
   namespace: sentiment-app-dev
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: model-api
@@ -16,7 +16,7 @@ spec:
         app: model-api
     spec:
       containers:
-      - name: model-api
-        image: normanboettcher/sentiment-app:rest-api-3.2.0
-        ports:
-        - containerPort: 5000
+        - name: model-api
+          image: normanboettcher/sentiment-app:rest-api-3.2.0
+          ports:
+            - containerPort: 5000
