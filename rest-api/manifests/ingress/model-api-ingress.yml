@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: model-api-ingress
+  namespace: sentiment-app-dev
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: sentiment-app.predict.dev
+      http:
+        paths:
+          - path: /predict
+            pathType: Prefix
+            backend:
+              service:
+                name: model-api-service
+                port:
+                  number: 8081
