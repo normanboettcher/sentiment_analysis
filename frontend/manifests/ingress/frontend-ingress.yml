@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sentiment-app-frontend-ingress
+  name: sentiment-frontend-ingress
   namespace: sentiment-app-dev
 spec:
   ingressClassName: nginx
   rules:
-    - host: sentiment-app.dev
+    - host: sentiment-app.comdev
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: sentiment-app-frontend-service
+                name: sentiment-frontend-service
                 port:
                   number: 8082

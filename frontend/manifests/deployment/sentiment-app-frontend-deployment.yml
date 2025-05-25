@@ -3,25 +3,25 @@ kind: Deployment
 metadata:
   name: sentiment-app-frontend-deployment
   labels:
-    app: sentiment-app-frontend
+    app: sentiment-app-frontend-dep
   namespace: sentiment-app-dev
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: sentiment-app-frontend
-    template:
-      metadata:
-        labels:
-          app: sentiment-model-frontend
-      spec:
-        containers:
-          - name: sentiment-app-frontend
-            image: normanboettcher/sentiment-app:frontend-2.0.0
-            ports:
-              - containerPort: 3000
-            env:
-              - name: VITE_MODEL_API_HOST
-                value: "localhost"
-              - name: VITE_MODEL_API_PORT
-                value: "8081"
+  template:
+    metadata:
+      labels:
+        app: sentiment-app-frontend
+    spec:
+      containers:
+        - name: sentiment-app-frontend
+          image: normanboettcher/sentiment-app:frontend-2.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: VITE_MODEL_API_HOST
+              value: "localhost"
+            - name: VITE_MODEL_API_PORT
+              value: "8081"
