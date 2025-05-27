@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
         - name: sentiment-app-frontend
-          image: normanboettcher/sentiment-app:frontend-2.0.0
+          image: normanboettcher/sentiment-app:frontend-3.0.0
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           env:
             - name: VITE_MODEL_API_HOST
               value: "model-api-service"
