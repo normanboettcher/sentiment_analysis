@@ -22,6 +22,6 @@ spec:
             - containerPort: 3000
           env:
             - name: VITE_MODEL_API_HOST
-              value: "localhost"
+              value: "model-api-service"
             - name: VITE_MODEL_API_PORT
               value: "8081"
