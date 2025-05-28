@@ -3,9 +3,9 @@ services:
   predict.sentiment.com:
     build:
       context: frontend/
-      args:
-        VITE_MODEL_API_HOST: localhost
-        VITE_MODEL_API_PORT: "5000"
+    environment:
+      VITE_MODEL_API_HOST: localhost
+      VITE_MODEL_API_PORT: "5000"
     restart: unless-stopped
     networks:
       - sentiment-net
@@ -24,8 +24,7 @@ services:
     expose:
       - "5000"
     environment:
-      FRONTEND_HOST_URL: localhost
-      FRONTEND_PORT: 3000
+      ALLOWED_ORIGINS: http://localhost:3000
 networks:
   sentiment-net:
     driver: bridge
