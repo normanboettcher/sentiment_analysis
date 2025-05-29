@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: sentiment-app.predict.dev
+    - host: sentiment-app.predict.service
       http:
         paths:
           - path: /predict
