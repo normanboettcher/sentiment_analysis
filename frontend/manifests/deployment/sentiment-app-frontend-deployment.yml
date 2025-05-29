@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
         - name: sentiment-app-frontend
-          image: normanboettcher/sentiment-app:frontend-3.0.1
+          image: normanboettcher/sentiment-app:frontend-3.2.0
           ports:
             - containerPort: 80
           env:
             - name: VITE_MODEL_API_URL
-              value: "sentiment-app.predict.service"
+              value: "http://sentiment-app.comdev"

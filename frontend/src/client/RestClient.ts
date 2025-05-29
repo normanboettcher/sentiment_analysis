@@ -15,7 +15,7 @@ export class RestClient {
     }
     private buildUrl(service: string) {
         const url = this.clientConfig.getTargetUrl()
-        return `${url}/${service}`
+        return `${url}/api/${service}`
     }
 }
 
