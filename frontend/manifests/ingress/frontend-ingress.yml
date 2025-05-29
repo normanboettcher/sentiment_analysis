@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: sentiment-app.comdev
+    - host: sentiment-app.com
       http:
         paths:
           # ---- SPA ---
