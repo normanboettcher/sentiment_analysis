@@ -19,8 +19,6 @@ FROM nginx:stable-alpine
 
 #copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY start_frontend.sh /start_frontend.sh
-RUN chmod +x /start_frontend.sh
 
 EXPOSE 80
-CMD ["/start_frontend.sh"]
+CMD ["nginx", "-g", "daemon off"]

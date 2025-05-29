@@ -4,7 +4,6 @@ import {
   useResponseValidator,
 } from "@frontend/client/ResponseValidator";
 import { useRestClient } from "@frontend/client/RestClient";
-import { useRestClientConfig } from "@frontend/client/RestClientConfig";
 import { PredictSentimentService } from "./PredictSentimentService";
 import { AxiosError } from "axios";
 
@@ -33,8 +32,7 @@ export class SentimentPredService implements PredictSentimentService {
   }
 
   private async postReview(request: ReviewPost) {
-    const clientConfig = useRestClientConfig();
-    const restClient = useRestClient(clientConfig);
+    const restClient = useRestClient();
     return await restClient.doPost<SentimentResponse, ReviewPost>(
       "predict",
       request

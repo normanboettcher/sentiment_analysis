@@ -3,10 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 export class RestClient {
     
-    private clientConfig: RestClientConfig;
-
-    constructor(clientConfig: RestClientConfig) {
-        this.clientConfig = clientConfig;
+    constructor() {
     }
 
     public async doPost<T, B>(service:string, body: B): Promise<AxiosResponse<T>> {
@@ -14,9 +11,8 @@ export class RestClient {
         return await axios.post(url, body) 
     }
     private buildUrl(service: string) {
-        const url = this.clientConfig.getTargetUrl()
-        return `${url}/api/${service}`
+        return `/api/${service}`
     }
 }
 
-export const useRestClient = (clientConfig: RestClientConfig) => new RestClient(clientConfig);
+export const useRestClient = () => new RestClient();
