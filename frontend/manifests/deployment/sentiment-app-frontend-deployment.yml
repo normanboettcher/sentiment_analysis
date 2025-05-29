@@ -21,7 +21,5 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: VITE_MODEL_API_HOST
-              value: "model-api-service"
-            - name: VITE_MODEL_API_PORT
-              value: "8081"
+            - name: VITE_MODEL_API_URL
+              value: "sentiment-app.predict.service"
