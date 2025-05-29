@@ -13,13 +13,10 @@ export class RestClient {
         const url = this.buildUrl(service)
         return await axios.post(url, body) 
     }
-
     private buildUrl(service: string) {
-        const hostname = this.clientConfig.getTargetHostname()
-        const port = this.clientConfig.getTargetPort()
-        return `http://${hostname}:${port}/${service}`
+        const url = this.clientConfig.getTargetUrl()
+        return `${url}/${service}`
     }
-
 }
 
 export const useRestClient = (clientConfig: RestClientConfig) => new RestClient(clientConfig);

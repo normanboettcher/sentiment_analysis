@@ -1,22 +1,17 @@
 export class RestClientConfig {
-    private targetHostname: string;
-    private targetPort: string;
+    private targetUrl: string;
 
-    private DEFAULT_TARGET_HOSTNAME = window.ENV.VITE_MODEL_API_HOST ?? 'localhost';
-    private DEFAULT_TARGET_PORT = window.ENV.VITE_MODEL_API_PORT ?? '5000';
+    private DEFAULT_TARGET_URL =
+    (window.ENV && window.ENV.VITE_MODEL_API_URL !== undefined
+        && window.ENV.VITE_MODEL_API_URL !== "") ? window.ENV.VITE_MODEL_API_URL : 'http://localhost:5000';
 
-    constructor(targetHostname?: string, targetPort?: string) {
-        this.targetHostname = targetHostname !== undefined ? targetHostname : this.DEFAULT_TARGET_HOSTNAME;
-        this.targetPort = targetPort !== undefined ? targetPort : this.DEFAULT_TARGET_PORT;
+    constructor(targetUrl?: string) {
+        this.targetUrl = targetUrl !== undefined ? targetUrl : this.DEFAULT_TARGET_URL;
     }
 
-    public getTargetHostname(){
-        return this.targetHostname
-    }
-
-    public getTargetPort() {
-        return this.targetPort;
+    public getTargetUrl(){
+        return this.targetUrl
     }
 }
 
-export const useRestClientConfig = (targetHostname?: string, targetPort?: string) => new RestClientConfig(targetHostname, targetPort);
+export const useRestClientConfig = (targetUrl?: string) => new RestClientConfig(targetUrl);
