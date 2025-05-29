@@ -1,9 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sentiment-frontend-ingress
+  name: sentiment-frontend-api-ingress
   namespace: sentiment-app-dev
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
@@ -11,11 +12,11 @@ spec:
     - host: sentiment-app.comdev
       http:
         paths:
-          # ---- SPA ---
-          - path: /
+          # ---- Backend API ----
+          - path: /api/(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: sentiment-frontend-service
+                name: model-api-service
                 port:
-                  number: 8082
+                  number: 8081
