@@ -1,5 +1,9 @@
 # sentiment_analysis
 
+## build and run the project
+
+TBC
+
 ## switching to kubernetes
 
 ### adding monitoring
@@ -7,26 +11,32 @@
 #### monitoring with metrics-server
 
 install metrics-server with the following commands:
-`
-helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-helm repo update
-helm upgrade --install metrics-server metrics-server/metrics-server \
-  --namespace sentiment-app-dev --create-namespace
-`
+
+`helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/`
+
+`helm repo update`
+
+`helm upgrade --install metrics-server metrics-server/metrics-server \
+--namespace sentiment-app-dev --create-namespace`
 
 if necessary, remove old installation of metrics-server:
 
-`
-kubectl delete deployment metrics-server -n kube-system
-kubectl delete clusterrole system:metrics-server
-kubectl delete clusterrolebinding system:metrics-server
-kubectl delete rolebinding metrics-server-auth-reader -n kube-system
-kubectl delete serviceaccount metrics-server -n kube-system
-kubectl delete apiservice v1beta1.metrics.k8s.io
-`
+`kubectl delete deployment metrics-server -n kube-system`
+
+`kubectl delete clusterrole system:metrics-server`
+
+`kubectl delete clusterrolebinding system:metrics-server`
+
+`kubectl delete rolebinding metrics-server-auth-reader -n kube-system`
+
+`kubectl delete serviceaccount metrics-server -n kube-system`
+
+`kubectl delete apiservice v1beta1.metrics.k8s.io`
+
 You can now have a look at your nodes and pods via:
 
 `kubectl top nodes`
+
 `kubectl top pods -A`
 
 These command should now include CPU and Memory Usage
@@ -52,4 +62,3 @@ These command should now include CPU and Memory Usage
 3. create a cluster-issuer-prod.yml
 4. apply it via `kubectl apply -f cluster-issuer-prod.yml`
 5. update ingress
-    6. 
