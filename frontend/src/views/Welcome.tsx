@@ -1,6 +1,6 @@
 import { useSentimentMessageService } from '@frontend/services/MessageService';
 import { PredictSentimentService } from '@frontend/services/PredictSentimentService';
-import { useSentimentPredService } from '@frontend/services/SentimentPredService';
+import { useSentimentPredService } from '@frontend/services/SentimentPredServiceImpl';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 

@@ -1,6 +1,6 @@
 import { vi, it, expect, describe } from "vitest";
 import * as rest_client from "../../client/RestClient";
-import { useSentimentPredService } from "../SentimentPredService";
+import { useSentimentPredService } from "../SentimentPredServiceImpl";
 
 vi.mock("axios");
 const restClientSpy = vi.spyOn(rest_client, "useRestClient");

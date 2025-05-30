@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
 
@@ -10,10 +12,9 @@ def create_app(config_name=None):
     app.logger.info(f"starting application with config profile: {config_name}")
     app.config.from_object(load_config(config_name))
 
-    host_url, target_port = app.config.get("FRONTEND_HOST_URL"), app.config.get(
-        "FRONTEND_PORT"
-    )
+    origins = os.getenv('ALLOWED_ORIGINS', '').split(',')
+    print(f'start up application with allowed origins: {[origin for origin in origins]}')
 
-    CORS(app, origins=[f"http://{host_url}:{target_port}"])
+    CORS(app, origins=origins)
     app.register_blueprint(predict_bp)
     return app

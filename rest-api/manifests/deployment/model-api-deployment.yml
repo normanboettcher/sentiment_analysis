@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-api-deployment
+  labels:
+    app: model-api
+  namespace: sentiment-app-dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: model-api
+  template:
+    metadata:
+      labels:
+        app: model-api
+    spec:
+      containers:
+        - name: model-api
+          image: normanboettcher/sentiment-app:rest-api-4.0.0
+          ports:
+            - containerPort: 5000
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "http://sentiment-app.comdev"
