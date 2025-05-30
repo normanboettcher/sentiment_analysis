@@ -8,8 +8,10 @@ from sentiment_model.review_learn import Attention
 
 logger = getLogger("SentimentModel")
 
-LOAD_MODEL_TIME = Summary('load_model_processing_time', 'Time spent loading the Model')
-PREPROCESSING_TIME = Summary('review_preprocessing_time', 'Time spent preprocessing the review for prediction')
+LOAD_MODEL_TIME = Summary("load_model_processing_time", "Time spent loading the Model")
+PREPROCESSING_TIME = Summary(
+    "review_preprocessing_time", "Time spent preprocessing the review for prediction"
+)
 
 
 class SentimentModel:
