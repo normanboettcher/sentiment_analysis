@@ -25,3 +25,12 @@ Some metrics are delivered as a standard, but some other must be implemented by 
 
 TBC
 
+----
+
+## Integrate the metrics in kubernetes cluster
+
+1. Set up a `ServiceMonitor` for our kubernetes `model-api-service`. It will be responsible for observing the metrics
+   endpoints of our pods which are load balanced by the service.
+2. The ServiceMonitor is created using `model-api-service-monitor.yml`
+    3. Important note: since the definition in `model-api-service.yml` has the `metadata.name=model-api-service` you
+       need to set the `spec.selector.matchLabels.name=model-api-service` in your `model-api-service-monitor.yml` 
