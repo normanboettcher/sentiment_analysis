@@ -38,6 +38,9 @@ You need to add `spec.ports.name=http` to your service manifest.
 You need to add a `Role` and a `RoleBinding` if your pods are running in a namespace where prometheus has no
 permissions.
 
+#### Role
+
+
 1. Set up a `ServiceMonitor` for our kubernetes `model-api-service`. It will be responsible for observing the metrics
    endpoints of our pods which are load balanced by the service.
 2. The ServiceMonitor is created using `model-api-service-monitor.yml`
@@ -54,4 +57,4 @@ permissions.
     11. you should see a `model-api-service-monitor` running
 12. Use Port Forwarding command `kubectl port-forward -n monitoring svc/prometheus-k8s 9090` to access
     prometheus from localhost
-13. 
+13. go to `http://localhost:9090/targets` and look at your ServiceMonitor. You should see all pods which are observed.
