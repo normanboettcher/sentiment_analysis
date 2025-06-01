@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: model-api-service
+      app: model-api-service
   namespaceSelector:
     matchNames:
       - sentiment-app-dev

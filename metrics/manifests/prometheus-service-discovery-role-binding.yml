@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-service-discovery-binding
+  namespace: sentiment-app-dev
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: monitoring
+roleRef:
+  kind: Role
+  name: prometheus-service-discovery
+  apiGroup: rbac.authorization.k8s.io

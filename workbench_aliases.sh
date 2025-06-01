@@ -1,0 +1,1 @@
+alias forward_prometheus='./forward_prometheus.sh'
