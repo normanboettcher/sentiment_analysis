@@ -35,6 +35,8 @@ A ServiceMonitor can only attach a Service port that it can identify by name (or
 endpoints block!)
 So if your ServiceMonitor get config like this `endpoints.port=http` this expects a NAMED port "http".
 You need to add `spec.ports.name=http` to your service manifest.
+You need to add a `Role` and a `RoleBinding` if your pods are running in a namespace where prometheus has no
+permissions.
 
 1. Set up a `ServiceMonitor` for our kubernetes `model-api-service`. It will be responsible for observing the metrics
    endpoints of our pods which are load balanced by the service.
