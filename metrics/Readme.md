@@ -101,3 +101,5 @@ Then we have `subjects`:
 12. Use Port Forwarding command `kubectl port-forward -n monitoring svc/prometheus-k8s 9090` to access
     prometheus from localhost
 13. go to `http://localhost:9090/targets` and look at your ServiceMonitor. You should see all pods which are observed.
+14. If you would like to use Grafana to visualize your metrics, execute
+    `kubectl port-forward -n monitoring deploy/grafana 3000` and go to `http://localhost:3000`
