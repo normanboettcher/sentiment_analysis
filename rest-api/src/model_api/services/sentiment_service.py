@@ -1,11 +1,18 @@
 from flask import Config, current_app
+from prometheus_client import Summary
 from sentiment_model.lookup_table_creator import LookupTableCreator
 from sentiment_model.text_preprocessing import ReviewPreprocessor
 from tensorflow.python.ops.lookup_ops import StaticVocabularyTable
 
 from model_api.model.model import SentimentModel
 
+GET_SENTIMENT_TIME = Summary(
+    "get_sentiment_processing_time",
+    "Time spent executing the whole get_sentiment process",
+)
 
+
+@GET_SENTIMENT_TIME.time()
 def get_sentiment(review: str, config: Config) -> dict:
     try:
         model_path, lookup_table_path = read_env_vars(config)
@@ -35,6 +42,12 @@ def read_env_vars(config: Config):
     )
 
 
+LOOKUP_TABLE_TIME = Summary(
+    "get_lookup_table_processing_time", "Time spent reading the lookup table"
+)
+
+
+@LOOKUP_TABLE_TIME.time()
 def get_lookup_table(lookup_table_path) -> StaticVocabularyTable:
     table_path = lookup_table_path
     try:

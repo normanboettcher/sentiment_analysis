@@ -3,12 +3,14 @@ kind: Service
 metadata:
   name: model-api-service
   namespace: sentiment-app-dev
+  labels:
+    app: model-api-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: model-api
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 8081
       targetPort: 5000
-      nodePort: 31001

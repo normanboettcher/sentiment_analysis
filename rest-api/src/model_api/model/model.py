@@ -1,11 +1,17 @@
 from logging import getLogger
 
 import tensorflow as tf
+from prometheus_client import Summary
 from sentiment_model.text_preprocessing import ReviewPreprocessor
 
 from sentiment_model.review_learn import Attention
 
 logger = getLogger("SentimentModel")
+
+LOAD_MODEL_TIME = Summary("load_model_processing_time", "Time spent loading the Model")
+PREPROCESSING_TIME = Summary(
+    "review_preprocessing_time", "Time spent preprocessing the review for prediction"
+)
 
 
 class SentimentModel:
@@ -14,6 +20,7 @@ class SentimentModel:
         self._model = self._load_model()
         self._preprocessor = preprocessor
 
+    @LOAD_MODEL_TIME.time()
     def _load_model(self):
         try:
             return tf.keras.models.load_model(
@@ -33,13 +40,17 @@ class SentimentModel:
             # preprocess logic needs dummy y, because funcitons are designed for inputs like x_batch, y_batch
             dummy_y = [10]
             review = tf.data.Dataset.from_tensor_slices(([review], dummy_y))
-            encoded_review = self._preprocessor.prepare_data_set(review)
+            encoded_review = self.prepare_data(review)
             prediction = self._model.predict(encoded_review)[0]
             sentiment = self.get_sentiment_from_prediction(prediction)
             return {"sentiment": sentiment}
         except Exception as e:
             logger.exception(f"Prediction failed due to an unexpected error: {e}.")
             return {"error": "An unexpected error occurred. Please try again later."}
+
+    @PREPROCESSING_TIME.time()
+    def prepare_data(self, review: str):
+        return self._preprocessor.prepare_data_set(review)
 
     def get_sentiment_from_prediction(self, proba):
         if proba >= 0.5:

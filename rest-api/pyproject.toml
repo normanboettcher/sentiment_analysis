@@ -12,6 +12,7 @@ envlist = ["py312", "lint", "format"]
 [tool.tox.env.py312]
 description = "Run tests with Python 3.12"
 deps = [
+    "-r../common-requirements.txt",
     "-rtest-requirements.txt",
     "-rrequirements.txt",
     "-e ../sentiment-model"
