@@ -4,7 +4,6 @@ metadata:
   name: sentiment-frontend-api-ingress
   namespace: sentiment-app-dev
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
