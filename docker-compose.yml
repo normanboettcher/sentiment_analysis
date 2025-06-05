@@ -3,14 +3,14 @@ services:
   predict.sentiment.com:
     build:
       context: frontend/
-    environment:
-      VITE_MODEL_API_HOST: localhost
-      VITE_MODEL_API_PORT: "5000"
+      dockerfile: Dockerfile.dev
     restart: unless-stopped
     networks:
       - sentiment-net
     ports:
-      - "3000:80"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
 
   sentiment.app.api:
     build:
@@ -23,8 +23,8 @@ services:
       - "5000:5000"
     expose:
       - "5000"
-    environment:
-      ALLOWED_ORIGINS: http://localhost:3000
+    #environment:
+      #ALLOWED_ORIGINS: http://localhost:3000
 networks:
   sentiment-net:
     driver: bridge
