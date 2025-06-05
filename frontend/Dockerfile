@@ -17,6 +17,7 @@ RUN yarn build
 #Stage 2: serve
 FROM nginx:stable-alpine
 
+
 #copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
