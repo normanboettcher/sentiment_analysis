@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: model-api
-          image: normanboettcher/sentiment-app:rest-api-4.1.0
+          image: normanboettcher/sentiment-app:rest-api-5.0.0
           ports:
             - containerPort: 5000
           #env:

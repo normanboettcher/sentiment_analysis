@@ -6,9 +6,9 @@ import path from 'path'
 export default defineConfig({
     server: {
       proxy: {
-        '/api': 'http://localhost:5000'
+        '/api': 'http://sentiment.app.api:5000'
       }
-    }
+    },
     build: {
         rollupOptions: {
             external: ['/env.js']

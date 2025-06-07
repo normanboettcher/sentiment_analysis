@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: sentiment-app-frontend
-          image: normanboettcher/sentiment-app:frontend-3.3.2
+          image: normanboettcher/sentiment-app:frontend-4.0.0
           ports:
             - containerPort: 80
