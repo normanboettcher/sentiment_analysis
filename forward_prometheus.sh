@@ -1,1 +1,0 @@
-kubectl port-forward -n monitoring svc/prometheus-k8s 9090
