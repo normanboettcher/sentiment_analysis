@@ -3,7 +3,6 @@ import sys
 from enum import Enum
 from itertools import islice
 import csv
-from typing import Any
 
 import requests
 import subprocess
@@ -81,10 +80,11 @@ def fire_review(reviews: list[str]):
             requests.post(url=f'http://{node_ip}:{node_port}/api/predict',
                           data=payload, headers=headers)
         except RequestException as err:
-            print(f'error occured calling the REST-API for review {review}', err)
+            print(f'Error occured calling the REST-API for review {review}', err)
 
 
 if __name__ == '__main__':
     n, sep, path = sys.argv[1], sys.argv[2], sys.argv[3]
+    print(f"call rest api with number {n}, file: {path} and separator {sep}")
     reviews = extract_reviews(n, sep, path)
     fire_review(reviews)
