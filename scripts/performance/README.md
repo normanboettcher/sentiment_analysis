@@ -51,10 +51,10 @@ The execution time of the review preprocessing seems not be a problem using 100 
 
 Let's go further with the performance testing and increase the numbers and see how the REST-API behaves.
 
-#### 1000 Reviews
-
-#### 5000 Reviews
-
-#### 10000 Reviews
-
-#### 25000 Reviews
+| Reviews | preprocessing time total avg | load_model time total avg | percentage preprocessing | percentage load_model | avg response time |
+|---------|------------------------------|---------------------------|--------------------------|-----------------------|-------------------|
+| 100     | 87.4 ms                      | 299 ms                    | 8.29 %                   | 28.8 %                | 1.05 s            |
+| 1000    | 96.6 ms                      | 303 ms                    | 8.79 %                   | 27.6 %                | 1.10 s            |                 
+| 5000    | -                            | -                         | -                        | -                     | -                 |
+| 10000   | -                            | -                         | -                        | -                     | -                 |
+| 25000   | -                            | -                         | -                        | -                     | -                 |
