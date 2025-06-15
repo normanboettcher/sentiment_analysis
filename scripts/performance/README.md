@@ -22,12 +22,25 @@ written using Python. Python has an excellent support for csv file handling.
 The Python script will be wrapped into a classic bash script, where the flags are handled and the Python script will be
 called.
 
+### Use the power of DevOps !
+
+Since we would like to execute the script with some different value, e.g. a different number of reviews,
+we should automate that to avoid unnecessary manual work.
+To do so, we can call the prometheus api in a way like this to get the average respont time:
+
+```
+curl http://localhost:9090/api/v1/query?query="sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"
+```
+
+Using this approach, it is easily to get all the values from all the metrics we need and just write them into a separate
+csv file to save the metric values after each run automtically.
+
 ### Run the script
 
 #### 100 Reviews
 
-Running the script for the first time with `n=100` ends up in the following metrics collected with prometheus and
-visualized with grafana:
+Running the script for the first time with `n=100` in a manual mode ends up in the following metrics collected with
+prometheus and visualized with grafana:
 
 ![pod_metrics_100.png](pod_metrics_100.png)
 
@@ -50,6 +63,8 @@ The execution time of the review preprocessing seems not be a problem using 100 
 ![prepr_percentage_100.png](prepr_percentage_100.png)
 
 Let's go further with the performance testing and increase the numbers and see how the REST-API behaves.
+We will use the automated approach to execute the performance tests with 1000, 5000, 10000 and 25000 Reviews.
+The values will be provided in `performance/metric_collection.csv`
 
 | Reviews | preprocessing time total avg | load_model time total avg | percentage preprocessing | percentage load_model | avg response time |
 |---------|------------------------------|---------------------------|--------------------------|-----------------------|-------------------|
