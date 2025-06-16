@@ -1,5 +1,6 @@
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from itertools import islice
 import csv
@@ -20,22 +21,21 @@ def parse_separator(value: str) -> Seperator | None:
     return next((s for s in Seperator if s.value == value), None)
 
 
-def extract_reviews(n: int, sep: str, path: str) -> list[str]:
-    if not sep:
+def extract_reviews(n_reviews: int, col_sep: str, file_path: str) -> list[str]:
+    if not col_sep:
         raise ValueError('Please provide a valid separator')
-    separator = parse_separator(sep)
+    separator = parse_separator(col_sep)
     if separator is None:
-        raise ValueError(f'Could not work with the separator {sep}. Please provide a valid separator.')
-    if not path:
-        raise ValueError(f'The path {path} is not a valid path.')
-    if n is None:
+        raise ValueError(f'Could not work with the separator {col_sep}. Please provide a valid separator.')
+    if not file_path:
+        raise ValueError(f'The path {file_path} is not a valid path.')
+    if n_reviews is None:
         raise ValueError(f'Please provide a valid number for the amount of reviews you want.')
     try:
-        reviews_amount = int(n)
+        reviews_amount = int(n_reviews)
     except (ValueError, TypeError) as err:
-        raise ValueError(f'Could not parse {n} to a number: {err}')
-
-    with open(path, mode='r', encoding='utf-8') as file:
+        raise ValueError(f'Could not parse {n_reviews} to a number: {err}')
+    with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=separator.value, quotechar='"')
         return [row[0] for row in islice(reader, reviews_amount)]
 
@@ -71,9 +71,9 @@ def get_node_port() -> tuple[str | None, str | None]:
         raise
 
 
-def fire_review(reviews: list[str]):
+def fire_review(review_list: list[str]):
     count = 0
-    for review in reviews:
+    for review in review_list:
         if count % 50 == 0 and count != 0:
             print(f"sent {count} reviews successfully")
         payload = json.dumps({"review": review})
@@ -88,17 +88,23 @@ def fire_review(reviews: list[str]):
 
 
 if __name__ == '__main__':
-    n, sep, path = sys.argv[1], sys.argv[2], sys.argv[3]
-    print(f"call rest api with number {n}, file: {path} and separator {sep}")
-    reviews = extract_reviews(n, sep, path)
+    wanted_reviews, sep, path = sys.argv[1], sys.argv[2], sys.argv[3]
+    print(f"call rest api with number {wanted_reviews}, file: {path} and separator {sep}")
+    reviews = extract_reviews(wanted_reviews, sep, path)
+    print(f"Extracted {len(reviews)} reviews.")
+    if len(reviews) != int(wanted_reviews):
+        print("Die Anzahl an extrahierten Reviews stimmt nicht mit der gewünschten Anzahl überein")
+        sys.exit(1)
     fire_review(reviews)
+    # with ThreadPoolExecutor(max_workers=4) as exe:
+    #   exe.map(fire_review, reviews)
 
-    request_time_avg_total = subprocess.run(
-        ["curl",
-         "http://localhost:9090/api/v1/query?query=sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    json = json.loads(request_time_avg_total.stdout)
-    print(f'request time: {json["data"]["result"][0]["value"][1]} seconds')
+#    request_time_avg_total = subprocess.run(
+#        ["curl",
+#         "http://localhost:9090/api/v1/query?query=sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"],
+#        capture_output=True,
+#        text=True,
+#        check=True
+#    )
+#    json = json.loads(request_time_avg_total.stdout)
+#    print(f'request time: {json["data"]["result"][0]["value"][1]} seconds')

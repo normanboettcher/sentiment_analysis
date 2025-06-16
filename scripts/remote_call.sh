@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-SCRIPT_PATH="/home/norman/Projekte/MachineLearning/sentiment_analysis/scripts/performance/src/remote_call_review.py"
+SCRIPT_PATH="/home/norman/Projekte/MachineLearning/sentiment_analysis/performance/src/remote_call_review.py"
 
 
 function print_help() {
