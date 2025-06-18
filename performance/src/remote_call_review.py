@@ -71,40 +71,64 @@ def get_node_port() -> tuple[str | None, str | None]:
         raise
 
 
-def fire_review(review_list: list[str]):
+def send_review(review: str):
+    payload = json.dumps({"review": review})
+    node_port, node_ip = get_node_port()
+    headers = {"content-type": "application/json"}
+    try:
+        requests.post(url=f'http://{node_ip}:{node_port}/api/predict',
+                      data=payload, headers=headers)
+        return True
+    except RequestException as err:
+        print(f'Error occured calling the REST-API for review {review}', err)
+        return False
+
+
+def fire_reviews(review_list: list[str], parallel=False):
     count = 0
-    for review in review_list:
-        if count % 50 == 0 and count != 0:
-            print(f"sent {count} reviews successfully")
-        payload = json.dumps({"review": review})
-        node_port, node_ip = get_node_port()
-        headers = {'content-type': 'application/json'}
-        try:
-            requests.post(url=f'http://{node_ip}:{node_port}/api/predict',
-                          data=payload, headers=headers)
-            count = count + 1
-        except RequestException as err:
-            print(f'Error occured calling the REST-API for review {review}', err)
+    if parallel:
+        print("Sending reviews in parallel")
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            results = list(executor.map(send_review, review_list))
+            for i, success in enumerate(results):
+                if success:
+                    count += 1
+                    if count % 50 == 0:
+                        print(f"sent {count} reviews successfully")
+    else:
+        print("Sending reviews sequential")
+        for i, review in enumerate(review_list):
+            success = send_review(review)
+            if success:
+                count += 1
+                if count % 50 == 0:
+                    print(f"sent {count} reviews successfully")
 
 
 if __name__ == '__main__':
     wanted_reviews, sep, path = sys.argv[1], sys.argv[2], sys.argv[3]
+    try:
+        if sys.argv[4] == "True":
+            parallel = True
+        else:
+            parallel = False
+    except (ValueError, TypeError) as err:
+        raise ValueError(f"Error occurred trying to parse {sys.argv} to boolean", err)
+
     print(f"call rest api with number {wanted_reviews}, file: {path} and separator {sep}")
     reviews = extract_reviews(wanted_reviews, sep, path)
     print(f"Extracted {len(reviews)} reviews.")
     if len(reviews) != int(wanted_reviews):
         print("Die Anzahl an extrahierten Reviews stimmt nicht mit der gewünschten Anzahl überein")
         sys.exit(1)
-    fire_review(reviews)
-    # with ThreadPoolExecutor(max_workers=4) as exe:
-    #   exe.map(fire_review, reviews)
+    fire_reviews(reviews, parallel)
 
-#    request_time_avg_total = subprocess.run(
-#        ["curl",
-#         "http://localhost:9090/api/v1/query?query=sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"],
-#        capture_output=True,
-#        text=True,
-#        check=True
-#    )
-#    json = json.loads(request_time_avg_total.stdout)
-#    print(f'request time: {json["data"]["result"][0]["value"][1]} seconds')
+    request_time_avg_total = subprocess.run(
+        ["curl",
+         "http://localhost:9090/api/v1/query?query=sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    json = json.loads(request_time_avg_total.stdout)
+    print(f'request time: {json["data"]["result"][0]["value"][1]} seconds')

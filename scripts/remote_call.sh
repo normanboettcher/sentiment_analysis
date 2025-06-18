@@ -27,7 +27,7 @@ Examples:
 EOF
 }
 
-OPTS=$(getopt -o "n:f:s:h" -l "number:, file:, sep:, help" -- "$@")
+OPTS=$(getopt -o "n:f:s:hp" -l "number:, file:, sep:, parallel, help" -- "$@")
 
 if [[ $? -ne 0 ]]; then
   echo "Failed to parse options"
@@ -39,6 +39,7 @@ eval set -- "$OPTS"
 NUMBER=0
 FILE=""
 SEP=""
+PARALLEL="False"
 while true; do
   case "$1" in
   -n | --number)
@@ -57,6 +58,10 @@ while true; do
     print_help
     exit 0
     ;;
+  -p | --parallel)
+    PARALLEL="True"
+    shift
+    ;;
   --)
     shift
     break
@@ -69,5 +74,5 @@ while true; do
 done
 
 echo "Starting script at $SCRIPT_PATH"
-python "$SCRIPT_PATH" "$NUMBER" "$SEP" "$FILE"
+python "$SCRIPT_PATH" "$NUMBER" "$SEP" "$FILE" "$PARALLEL"
 exit 0
