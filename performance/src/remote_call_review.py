@@ -10,6 +10,8 @@ import subprocess
 
 from requests import RequestException
 
+from metric_scraper import MetricScraper
+
 
 class Seperator(Enum):
     KOMMA = ','
@@ -21,7 +23,7 @@ def parse_separator(value: str) -> Seperator | None:
     return next((s for s in Seperator if s.value == value), None)
 
 
-def extract_reviews(n_reviews: int, col_sep: str, file_path: str) -> list[str]:
+def extract_reviews(n_reviews: str, col_sep: str, file_path: str) -> list[str]:
     if not col_sep:
         raise ValueError('Please provide a valid separator')
     separator = parse_separator(col_sep)
@@ -33,8 +35,8 @@ def extract_reviews(n_reviews: int, col_sep: str, file_path: str) -> list[str]:
         raise ValueError(f'Please provide a valid number for the amount of reviews you want.')
     try:
         reviews_amount = int(n_reviews)
-    except (ValueError, TypeError) as err:
-        raise ValueError(f'Could not parse {n_reviews} to a number: {err}')
+    except (ValueError, TypeError) as error:
+        raise ValueError(f'Could not parse {n_reviews} to a number: {error}')
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=separator.value, quotechar='"')
         return [row[0] for row in islice(reader, reviews_amount)]
@@ -79,8 +81,8 @@ def send_review(review: str):
         requests.post(url=f'http://{node_ip}:{node_port}/api/predict',
                       data=payload, headers=headers)
         return True
-    except RequestException as err:
-        print(f'Error occured calling the REST-API for review {review}', err)
+    except RequestException as error:
+        print(f'Error occured calling the REST-API for review {review}', error)
         return False
 
 
@@ -123,12 +125,5 @@ if __name__ == '__main__':
         sys.exit(1)
     fire_reviews(reviews, parallel)
 
-    request_time_avg_total = subprocess.run(
-        ["curl",
-         "http://localhost:9090/api/v1/query?query=sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)"],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    json = json.loads(request_time_avg_total.stdout)
-    print(f'request time: {json["data"]["result"][0]["value"][1]} seconds')
+    metric_scraper = MetricScraper()
+    metric_scraper.get_avg_request_time_total()
