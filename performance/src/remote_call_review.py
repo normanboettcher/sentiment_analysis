@@ -4,10 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from itertools import islice
 import csv
-
 import requests
 import subprocess
-
 from requests import RequestException
 
 from metric_scraper import MetricScraper

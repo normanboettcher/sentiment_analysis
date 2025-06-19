@@ -1,5 +1,10 @@
 import subprocess
 import json
+from enum import Enum
+
+
+class MetricLabels(Enum):
+    AVG_REQUEST_TIME_TOTAL = "avg_request_time_total"
 
 
 class MetricScraper:
