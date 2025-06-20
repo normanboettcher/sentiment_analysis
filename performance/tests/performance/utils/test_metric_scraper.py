@@ -1,7 +1,7 @@
 import unittest
 from subprocess import CompletedProcess
 from unittest.mock import patch
-from performance.src.metric_scraper import MetricScraper
+from performance.src.performance.utils.metric_scraper import MetricScraper
 
 
 class TestMetricScraper(unittest.TestCase):

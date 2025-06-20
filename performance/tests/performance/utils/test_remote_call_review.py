@@ -1,6 +1,6 @@
 import unittest
 
-from performance.src.remote_call_review import extract_reviews
+from performance.src.performance.utils.remote_call_review import extract_reviews
 
 
 class TestRemoteCallReviews(unittest.TestCase):
