@@ -28,7 +28,9 @@ class MetricScraper:
 
     def get_avg_request_time_total(self):
         json_data = self._get_metric_as_json("sum(request_predict_seconds_sum)/sum(request_predict_seconds_count)")
-        print(f'request time: {json_data["data"]["result"][0]["value"][1]} seconds')
+        request_time_total_avg = json_data["data"]["result"][0]["value"][1]
+        print(f'request time: {request_time_total_avg} seconds')
+        return request_time_total_avg
 
     def collect_and_reset(self, n_reviews: str, reset=True, write_output=True):
         # collect the metrics into a dictionary where each entry is the amount of reviews containing another dictionary

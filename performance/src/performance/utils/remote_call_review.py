@@ -8,7 +8,7 @@ import requests
 import subprocess
 from requests import RequestException
 
-from metric_scraper import MetricScraper
+from performance.utils.metric_scraper import MetricScraper
 
 
 class Seperator(Enum):

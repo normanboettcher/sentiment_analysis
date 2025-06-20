@@ -1,6 +1,6 @@
 import unittest
 
-from performance.src.performance.utils.remote_call_review import extract_reviews
+from performance.utils.remote_call_review import extract_reviews
 
 
 class TestRemoteCallReviews(unittest.TestCase):
@@ -11,3 +11,5 @@ class TestRemoteCallReviews(unittest.TestCase):
         for review in reviews:
             print(20 * "=" + "REVIEW" + 20 * "=")
             print(review)
+
+
