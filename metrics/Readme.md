@@ -18,6 +18,7 @@ to define the custom metrics, we should use some questions we would like to answ
 - How many resources (CPU, Memory) was consumed by each pod?
 - What is the average response time?
 - What is the average review length ?
+- How much time did the loading process of the model take?
 
 Some metrics are delivered as a standard, but some other must be implemented by ourselfs.
 
