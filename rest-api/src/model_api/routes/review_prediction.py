@@ -5,16 +5,18 @@ from model_api.services.sentiment_service import get_sentiment
 
 predict_bp = Blueprint("predict", __name__)
 
-REQUEST_TIME_HISTOGRAM = Histogram("request_predict_seconds_histogram",
-                                   "Time spent processing request histogram specific")
-REQUEST_TIME = Summary('request_predict_seconds', 'Time spent processing the request')
+REQUEST_TIME_HISTOGRAM = Histogram(
+    "request_predict_seconds_histogram",
+    "Time spent processing request histogram specific",
+)
+REQUEST_TIME = Summary("request_predict_seconds", "Time spent processing the request")
 REQUEST_SUCCESS = Counter(
     "request_predict_success", "Count of successfully requests of /predict"
 )
 REQUEST_FAILURE = Counter(
     "request_predict_failure", "Count of failure requests of /predict"
 )
-REVIEW_LENGTH = Summary('review_length', 'Review lengths sent from users')
+REVIEW_LENGTH = Summary("review_length", "Review lengths sent from users")
 
 
 @predict_bp.route("/predict", methods=["POST"])

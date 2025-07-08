@@ -6,10 +6,10 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.tox]
-envlist = ["py312", "lint", "format"]
+envlist = ["py311", "lint", "format"]
 
-[tool.tox.env.py312]
-description = "Run tests with Python 3.12"
+[tool.tox.env.py311]
+description = "Run tests with Python 3.11"
 deps = [
     "-rtest-requirements.txt",
     "-rrequirements.txt"

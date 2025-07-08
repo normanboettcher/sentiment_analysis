@@ -19,7 +19,7 @@ def create_app(config_name=None):
     )
 
     CORS(app, origins=origins)
-    api_bp = Blueprint('api', __name__, url_prefix='/api')
+    api_bp = Blueprint("api", __name__, url_prefix="/api")
     api_bp.register_blueprint(predict_bp)
     api_bp.register_blueprint(metrics_bp)
     app.register_blueprint(api_bp)

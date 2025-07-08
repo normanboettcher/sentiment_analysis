@@ -1,3 +1,6 @@
 matplotlib
 seaborn
 numpy
+tensorflow
+keras
+nltk
