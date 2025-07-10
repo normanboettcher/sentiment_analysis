@@ -18,7 +18,9 @@ testing.
 
 ## 🔧 1. Install Dependencies
 
-Install required packages for virtualization and networking:
+### Ubuntu
+
+#### Install required packages for virtualization and networking:
 
 ```
 sudo apt update
@@ -26,12 +28,14 @@ sudo apt install -y qemu-kvm libvirt-daemon libvirt-daemon-system libvirt-client
     bridge-utils virt-manager network-manager
 ```
 
-### Add your user to the `libvirt` group:
+#### Add your user to the `libvirt` group:
 
 ```
 sudo usermod -a -G libvirt $(whoami)
 newgrp libvirt
 ```
+
+### Fedora/RHEL/CentOS
 
 ## 📦 2. Download OpenShift Local
 
