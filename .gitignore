@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+sentiment-model/sentiment-model/
+rest-api/rest-api/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -174,4 +176,4 @@ data
 embeddings
 models
 logs
-*.keras
+*.keras!/sentiment-model/sentiment-model/

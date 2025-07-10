@@ -11,7 +11,7 @@ class IntegrationTests(unittest.TestCase):
     def test_success_prediction(self):
         app = create_test_app().test_client()
         response = app.post('/predict', json={'review': 'What a really great movie!'})
-        print(f'prediction for review [{'What a really great movie!'}] is: [{response.json}]')
+        print(f'prediction for review [What a really great movie!] is: [{response.json}]')
         self.assertEqual(response.status_code, 200)
         self.assertIn('sentiment', response.json)
 

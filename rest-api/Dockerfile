@@ -7,7 +7,6 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /apps
 
-COPY common-requirements.txt /apps
 COPY sentiment-model/requirements.txt /apps/sentiment-model/
 COPY rest-api/requirements.txt /apps/rest-api/
 COPY pip.conf /etc/
@@ -19,8 +18,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install  --upgrade pip setuptools
 
 #install required dependencies first
-RUN pip install -r common-requirements.txt \
-    -r sentiment-model/requirements.txt \
+RUN pip install -r sentiment-model/requirements.txt \
     -r rest-api/requirements.txt
 
 #copy rest of code

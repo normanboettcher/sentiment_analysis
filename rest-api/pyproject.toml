@@ -6,13 +6,11 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.tox]
-envlist = ["py311", "lint", "format"]
+envlist = ["py39","py311", "py312", "py310", "lint", "format"]
 
-
-[tool.tox.env.py312]
+[tool.tox.testenv]
 description = "Run tests with Python 3.11"
 deps = [
-    "-r../common-requirements.txt",
     "-rtest-requirements.txt",
     "-rrequirements.txt",
     "-e ../sentiment-model"
